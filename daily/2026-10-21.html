@@ -2,237 +2,163 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CS热点短视频脚本 · 2026-10-21</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>CS热点脚本库 · 联想百应 · 2026-10-21</title>
 <style>
-  body {
-    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
-    background: #f5f5f5;
-    margin: 0;
-    padding: 20px;
-    color: #1a1a1a;
-  }
-  .container {
-    max-width: 720px;
-    margin: 0 auto;
-  }
-  .header {
-    background: linear-gradient(135deg, #1C1410, #D8000F);
-    color: white;
-    padding: 24px 28px;
-    border-radius: 12px 12px 0 0;
-    margin-bottom: 0;
-  }
-  .header h1 {
-    margin: 0 0 6px 0;
-    font-size: 20px;
-    font-weight: 700;
-  }
-  .header p {
-    margin: 0;
-    font-size: 13px;
-    opacity: 0.85;
-  }
-  .card {
-    background: white;
-    border-radius: 0 0 12px 12px;
-    margin-bottom: 20px;
-    overflow: hidden;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-  }
-  .card-header {
-    padding: 14px 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .card-header.red { background: #FFF5F5; border-left: 4px solid #D8000F; }
-  .card-header.blue { background: #F0F4FF; border-left: 4px solid #3B82F6; }
-  .card-header.green { background: #F0FFF4; border-left: 4px solid #22C55E; }
-  .card-header.purple { background: #F5F0FF; border-left: 4px solid #8B5CF6; }
-  .tag {
-    font-size: 11px;
-    font-weight: 700;
-    padding: 3px 10px;
-    border-radius: 20px;
-    white-space: nowrap;
-  }
-  .tag-red { background: #D8000F; color: white; }
-  .tag-blue { background: #3B82F6; color: white; }
-  .tag-green { background: #22C55E; color: white; }
-  .tag-purple { background: #8B5CF6; color: white; }
-  .hot-tag {
-    font-size: 11px;
-    color: #888;
-    background: #f0f0f0;
-    padding: 3px 8px;
-    border-radius: 4px;
-  }
-  .card-body {
-    padding: 16px 20px 20px;
-  }
-  .script-box {
-    background: #FAFAFA;
-    border: 1px solid #EBEBEB;
-    border-radius: 8px;
-    padding: 16px;
-    font-size: 15px;
-    line-height: 1.9;
-    color: #333;
-    white-space: pre-wrap;
-    position: relative;
-  }
-  .copy-btn {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: #D8000F;
-    color: white;
-    border: none;
-    padding: 6px 14px;
-    border-radius: 6px;
-    font-size: 12px;
-    cursor: pointer;
-    font-weight: 600;
-  }
-  .copy-btn:hover { background: #b3000c; }
-  .footer {
-    text-align: center;
-    color: #aaa;
-    font-size: 12px;
-    margin-top: 24px;
-    padding-bottom: 20px;
-  }
-  .step-label {
-    font-size: 11px;
-    font-weight: 700;
-    color: #D8000F;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 6px;
-  }
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#f2f3f7;color:#1a1a2e;padding:0 0 40px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding:0 14px}
+.hero{background:linear-gradient(135deg,#667eea 0%,#764ba2 55%,#f093fb 100%);color:#fff;padding:26px 18px 22px}
+.hero h1{font-size:23px;font-weight:800;letter-spacing:.5px}
+.hero .sub{font-size:13px;opacity:.92;margin-top:6px}
+.hero .tags{margin-top:12px}
+.hero .tag{display:inline-block;background:rgba(255,255,255,.22);border-radius:20px;padding:3px 12px;font-size:11.5px;margin:4px 5px 0 0}
+.hint{background:#fff8e1;border-left:4px solid #f0a500;border-radius:0 8px 8px 0;padding:11px 13px;font-size:13px;color:#5a4a10;margin:14px 0}
+.filters{background:#fff;border-radius:12px;padding:15px;box-shadow:0 2px 12px rgba(20,20,50,.06);margin-bottom:14px;position:sticky;top:0;z-index:20}
+.frow{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+.frow:last-child{margin-bottom:0}
+.flabel{font-size:12.5px;color:#888;width:52px;flex-shrink:0;font-weight:600}
+select{flex:1;font-family:inherit;font-size:15px;font-weight:600;color:#1a1a2e;padding:11px 12px;border:1.5px solid #e2e4ef;border-radius:9px;background:#fafbff;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M2 4l4 4 4-4' stroke='%23888' stroke-width='2' fill='none' stroke-linecap='round'/></svg>");background-repeat:no-repeat;background-position:right 12px center}
+select:focus{outline:none;border-color:#667eea;background-color:#fff}
+.count{text-align:center;font-size:12.5px;color:#888;margin:2px 0 12px}
+.count b{color:#667eea;font-size:15px}
+.card{background:#fff;border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:0 2px 12px rgba(20,20,50,.05)}
+.chead{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.avatar{width:40px;height:40px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#fff;background:linear-gradient(135deg,#667eea,#764ba2)}
+.cinfo{flex:1;min-width:0}
+.cname{font-size:16px;font-weight:800;line-height:1.3}
+.cmeta{font-size:12px;color:#888;margin-top:2px}
+.cmeta .badge{display:inline-block;background:#f0f2ff;color:#5a6fd6;border-radius:4px;padding:1px 7px;margin-right:5px;font-weight:600}
+.chot{font-size:11.5px;color:#D8000F;background:#fff5f5;border-radius:4px;padding:1px 7px;display:inline-block;margin-top:5px}
+.ctitle{font-size:14.5px;font-weight:700;color:#1a1a2e;margin:8px 0 10px;line-height:1.5;padding-left:9px;border-left:3px solid #D8000F}
+.cbody{font-size:14px;color:#333;white-space:pre-wrap;background:#fafafc;border-radius:8px;padding:13px;line-height:1.9}
+.btn{width:100%;margin-top:11px;background:#667eea;color:#fff;border:none;border-radius:8px;padding:12px;font-size:14.5px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn:active{background:#5568d3}
+.btn.done{background:#28a745}
+.empty{text-align:center;padding:50px 20px;color:#aaa;font-size:14px}
+.footer{text-align:center;font-size:12px;color:#aaa;padding:22px 0 10px;line-height:1.9}
+.toast{position:fixed;left:50%;bottom:44px;transform:translateX(-50%);background:rgba(0,0,0,.85);color:#fff;padding:11px 26px;border-radius:24px;font-size:14.5px;opacity:0;transition:opacity .22s;pointer-events:none;z-index:99}
+.toast.show{opacity:1}
 </style>
 </head>
 <body>
-<div class="container">
-
-  <div class="header">
-    <h1>🔥 CS热点短视频脚本 · 10月21日</h1>
-    <p>联想百应 · CS城市经理专用 · 热点来源：微博热搜</p>
-  </div>
-
-  <!-- 脚本① -->
-  <div class="card">
-    <div class="card-header red">
-      <span class="tag tag-red">📱 脚本①</span>
-      <span class="hot-tag">#全球手机销量暴跌#</span>
-    </div>
-    <div class="card-body">
-      <div class="step-label">角度：手机销量跌 → 维修需求涨</div>
-      <div class="script-box" id="script1">各位老板，今天看到一个消息——全球手机销量暴跌！
-
-以前手机用两年就换，现在大家都在省钱，一部手机用三四年。
-
-但手机越用越慢、屏幕碎了、电池不行了——修手机的需求反而在涨！
-
-加入百应，美团+抖音帮你把店推到周边3公里内有需要的人，运营商合作帮你接大单，29省200+城市1000家门店都在用。
-
-手机卖不动了，修手机才是未来！
-
-想了解的，评论区扣"百应"，我私信你。<button class="copy-btn" onclick="copyScript('script1')">复制脚本</button></div>
-    </div>
-  </div>
-
-  <!-- 脚本② -->
-  <div class="card">
-    <div class="card-header blue">
-      <span class="tag tag-blue">🤖 脚本②</span>
-      <span class="hot-tag">#突然发现已经无法停止使用AI了#</span>
-    </div>
-    <div class="card-body">
-      <div class="step-label">角度：AI时代 → 跟上就赢</div>
-      <div class="script-box" id="script2">各位老板，今天刷到一个帖子——很多人说已经无法停止使用AI了。
-
-你以为AI只会写文章？错了。
-修电脑的同行已经在用AI做故障诊断、自动报价、回复客户了。
-
-你还在手动录单、记库存、打电话？
-
-加入百应，平台提供AI辅助工具帮你提升效率，美团+抖音全网获客让你不用再发小广告，运营商项目（宽带、监控、门禁）帮你接大单。
-
-AI来了，跟上的吃肉，跟不上的出局。
-
-想了解的，评论区扣"百应"，我私信你。<button class="copy-btn" onclick="copyScript('script2')">复制脚本</button></div>
-    </div>
-  </div>
-
-  <!-- 脚本③ -->
-  <div class="card">
-    <div class="card-header green">
-      <span class="tag tag-green">💼 脚本③</span>
-      <span class="hot-tag">#应届生苦等1个月复试却被告知岗位已满#</span>
-    </div>
-    <div class="card-body">
-      <div class="step-label">角度：就业难 → 修电脑是出路</div>
-      <div class="script-box" id="script3">各位老板，今天看到一个扎心的话题——应届生等了一个月，复试被告知岗位没了。
-
-打工人越来越难，但你知道吗？很多修电脑的老板一个月能挣两三万，不靠学历靠技术。
-
-问题是：你自己干，和跟着平台一起干，是两回事。
-
-加入百应，不用自己从零摸索，平台给你流量、给你供应链、给你运营商项目，美团+抖音帮你获客，29省200+城市1000家门店经验直接复制。
-
-打工没出路，不如自己当老板。
-
-想了解的，评论区扣"百应"，我私信你。<button class="copy-btn" onclick="copyScript('script3')">复制脚本</button></div>
-    </div>
-  </div>
-
-  <!-- 脚本④ -->
-  <div class="card">
-    <div class="card-header purple">
-      <span class="tag tag-purple">📱 脚本④</span>
-      <span class="hot-tag">#iPhoneDuo开箱#</span>
-    </div>
-    <div class="card-body">
-      <div class="step-label">角度：折叠屏新品 → 维修需求爆发</div>
-      <div class="script-box" id="script4">各位老板，iPhone Duo折叠手机刚刚开售了！
-
-折叠屏手机，屏幕折来折去，最容易坏的就是这块屏。以前苹果换屏动不动上千，现在折叠屏只会更贵。
-
-你是不是还守着旧模式，等客户上门？
-
-加入百应，美团+抖音帮你主动找到周边有维修需求的人，不用等客户，靠平台流量就够你忙。
-
-折叠屏来了，专业维修的春天来了！
-
-想了解的，评论区扣"百应"，我私信你。<button class="copy-btn" onclick="copyScript('script4')">复制脚本</button></div>
-    </div>
-  </div>
-
-  <div class="footer">
-    联想百应 · CS渠道新媒体营销 · 每日自动生成<br>
-    明早8:30自动更新下一工作日脚本
+<div class="hero">
+  <h1>🔥 CS热点脚本库</h1>
+  <div class="sub">联想百应 · 渠道新媒体营销 · 2026-10-21 · 34位CS专属脚本</div>
+  <div class="tags">
+    <span class="tag">每日热点强绑定</span>
+    <span class="tag">按城市定制</span>
+    <span class="tag">30秒口播</span>
+    <span class="tag">一键复制</span>
   </div>
 </div>
 
+<div class="wrap">
+  <div class="hint">
+    👉 选大区和你的名字，直接复制脚本去录。抖音 + 视频号双平台都发，控制在30秒内。
+  </div>
+
+  <div class="filters">
+    <div class="frow">
+      <span class="flabel">大区</span>
+      <select id="regionSel"></select>
+    </div>
+    <div class="frow">
+      <span class="flabel">姓名</span>
+      <select id="nameSel"></select>
+    </div>
+  </div>
+
+  <div class="count" id="count"></div>
+  <div id="list"></div>
+
+  <div class="footer">
+    热点来源：2026-10-21 微博热搜（已百度交叉验证）<br>
+    人员分布：飞书表格「CS及覆盖城市」<br>
+    超级工仔出品 · 上线即干活
+  </div>
+</div>
+
+<div class="toast" id="toast">已复制 ✅</div>
+
+<script id="csdata" type="application/json">[{"name": "张继霖", "region": "华北", "city": "华北大区", "cityShort": "华北", "topic": "#全球手机销量暴跌#", "topicLabel": "手机销量暴跌", "title": "【华北】手机销量暴跌，华北老板的旧机生意正在变好", "content": "各位老板，今天刷到一个消息——全球手机销量暴跌，同比少了十几个百分点。\n\n华北作为手机换机的大区，销量一跌，最先冒出来的不是坏消息，是另一条路。\n\n以前华北的客人手机一坏就换新的，现在千元机用三年，坏了来修、来保养、来换电池。可不少老板还守着等客上门的老习惯，把这波自然上门的生意晾在门外。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\n货和手艺这块，让你敢接大单。\n\n联想原装配件，品牌授权，不用到处找货、担心假货。品质有保障，利润空间更大，客单价自然也提得起来。\n\n华北这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想了解这波修旧机的生意怎么接，评论区扣「百应」，我私信你。\n\n——联想百应张继霖，华北大区"}, {"name": "廖文静", "region": "华中", "city": "华中大区", "cityShort": "华中", "topic": "#全球手机销量暴跌#", "topicLabel": "手机销量暴跌", "title": "【华中】手机销量跌了，华中老板却迎来第二波生意", "content": "各位老板，今天刷到一个消息——全球手机销量暴跌，同比少了十几个百分点。\n\n华中不少老板第一反应是慌，其实你把账算一遍就明白了。\n\n销量跌下来，落到终端就是修得多、换得慢。客户手里那台机器还得用三年，这三年里的维修、保养、配件，全是落在门店里的单子。问题是，这股潮很多店压根没接住。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\n获客这块，百应帮你把入口全铺上。\n\n美团、高德、抖音全网营销，总部统一投放，你不用自己研究算法。客户在本地搜维修、搜配件，第一屏就能看见你。\n\n华中这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想看华中这边怎么把这波修机需求接住，评论区扣「百应」，我给你方案。\n\n——联想百应廖文静，华中大区"}, {"name": "高振杰", "region": "华南", "city": "华南大区", "cityShort": "华南", "topic": "#全球手机销量暴跌#", "topicLabel": "手机销量暴跌", "title": "【华南】全球手机销量暴跌，华南老板别慌，这是你的机会", "content": "各位老板，今天刷到一个消息——全球手机销量暴跌，同比少了十几个百分点。\n\n华南是全国手机出货最旺的地方，也最先感受到这场降温。\n\n渠道受冲击是必然的，但最先受益的，是那些会做修、养、配件的门店。客户不换机了，可客户手里的手机照样要修、要保养、要换电池——这单子就在你店里。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\n货和手艺这块，让你敢接大单。\n\n联想原装配件，品牌授权，不用到处找货、担心假货。品质有保障，利润空间更大，客单价自然也提得起来。\n\n华南这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想了解华南这边怎么把维修做成长期生意，评论区扣「百应」，我私信你。\n\n——联想百应高振杰，华南大区"}, {"name": "刘磊", "region": "华北", "city": "郑州", "cityShort": "郑州", "topic": "#全球手机销量暴跌#", "topicLabel": "手机销量暴跌", "title": "【郑州】手机销量暴跌，郑州老板的第二条曲线在哪儿", "content": "各位老板，今天刷到一个消息——全球手机销量暴跌，同比少了十几个百分点。\n\n郑州老板撑了很多年，靠的是老客户转介绍。可这招现在有点吃力了。\n\n老客户不换机了，新客户又难找，生意不是变少了，是变得只剩熟人生意。销量跌是行业的事，但活着的办法得自己找——旧机维修、保养、配件，这就是你现在手里最实在的第二条曲线。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\n获客这块，百应帮你把入口全铺上。\n\n美团、高德、抖音全网营销，总部统一投放，你不用自己研究算法。客户在本地搜维修、搜配件，第一屏就能看见你。\n\n郑州这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想看看郑州这边怎么把获客和修机生意一起做起来，评论区扣「百应」，我私信你。\n\n——联想百应刘磊，郑州"}, {"name": "卫中杰", "region": "华北", "city": "太原,山西", "cityShort": "山西", "topic": "#全球手机销量暴跌#", "topicLabel": "手机销量暴跌", "title": "【山西】手机卖不动了，山西老板反而有得赚", "content": "各位老板，今天刷到一个消息——全球手机销量暴跌，同比少了十几个百分点。\n\n山西的老板心里都有个落差，这条消息其实是来解决落差的。\n\n以前街上换手机的多，现在换的少了。可换的少、修的多，这个账你们算过吗？客户手里那台机器还得撑三年，修、养、换电池全在本地——前提是，你能让人知道你这儿能干这个。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\n获客这块，百应帮你把入口全铺上。\n\n美团、高德、抖音全网营销，总部统一投放，你不用自己研究算法。客户在本地搜维修、搜配件，第一屏就能看见你。\n\n山西这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想了解山西这边怎么把修机需求变成稳定客流，评论区扣「百应」，我私信你。\n\n——联想百应卫中杰，太原,山西"}, {"name": "孙浩", "region": "华北", "city": "济南,淄博,潍坊", "cityShort": "山东", "topic": "#全球手机销量暴跌#", "topicLabel": "手机销量暴跌", "title": "【山东】全球手机销量暴跌，山东老板看懂这个信号就赢了", "content": "各位老板，今天刷到一个消息——全球手机销量暴跌，同比少了十几个百分点。\n\n济南、淄博、潍坊的老板都在盯着新机卖不动发愁，但同一批客户，钱没少花。\n\n钱只是从买新的，变成了把旧的修好。这笔钱谁接谁赚。可你要是一直只在门口等客、只在朋友圈发发广告，这股自然需求来了你也不知道。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\n获客这块，百应帮你把入口全铺上。\n\n美团、高德、抖音全网营销，总部统一投放，你不用自己研究算法。客户在本地搜维修、搜配件，第一屏就能看见你。\n\n山东这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想看山东这边怎么把这批修机客户捞出来，评论区扣「百应」，我私信你。\n\n——联想百应孙浩，济南,淄博,潍坊"}, {"name": "程新佳", "region": "华北", "city": "沈阳,长春", "cityShort": "沈阳,长春", "topic": "#全球手机销量暴跌#", "topicLabel": "手机销量暴跌", "title": "【东北】手机销量暴跌，沈阳长春老板的旧机生意翻倍了", "content": "各位老板，今天刷到一个消息——全球手机销量暴跌，同比少了十几个百分点。\n\n东北老板都懂耐用这两个字，客户不换机反而是好事。\n\n一台手机用好几年，硬是把这门生意撑住了。可问题是，客户修完了下次还来不来？他怎么知道你这儿靠谱、怎么找到你？光靠老客介绍，圈子就那么大。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\n获客这块，百应帮你把入口全铺上。\n\n美团、高德、抖音全网营销，总部统一投放，你不用自己研究算法。客户在本地搜维修、搜配件，第一屏就能看见你。\n\n沈阳,长春这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想了解沈阳长春这边怎么把客流做起来，评论区扣「百应」，我私信你。\n\n——联想百应程新佳，沈阳,长春"}, {"name": "李康", "region": "华北", "city": "西安", "cityShort": "西安", "topic": "#全球手机销量暴跌#", "topicLabel": "手机销量暴跌", "title": "【西安】手机销量跌了，西安老板还能从哪拿客户", "content": "各位老板，今天刷到一个消息——全球手机销量暴跌，同比少了十几个百分点。\n\n西安老板最实在，客户手里的旧机能用三年，可你不能只等那三年里的一次上门。\n\n获客还只靠门口招牌和几个老客户的话，客户不来你就干坐着。销量跌是所有人的事，但修机、养机、配件、换屏这些刚需，恰恰是能反复做的生意。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\n货和手艺这块，让你敢接大单。\n\n联想原装配件，品牌授权，不用到处找货、担心假货。品质有保障，利润空间更大，客单价自然也提得起来。\n\n西安这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想看西安这边怎么把老客和散客都接住，评论区扣「百应」，我私信你。\n\n——联想百应李康，西安"}, {"name": "白陆", "region": "华北", "city": "吉林", "cityShort": "吉林", "topic": "#全球手机销量暴跌#", "topicLabel": "手机销量暴跌", "title": "【吉林】手机销量暴跌，吉林老板别盯着卖新机", "content": "各位老板，今天刷到一个消息——全球手机销量暴跌，同比少了十几个百分点。\n\n吉林市场不大，新机卖不动是事实，这是行情。\n\n可老机器全在客户手里，这台存量机器市场你接了几台？客户不是不修，是不知道你这儿修得放心、价钱公道、还能上门取送。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\n获客这块，百应帮你把入口全铺上。\n\n美团、高德、抖音全网营销，总部统一投放，你不用自己研究算法。客户在本地搜维修、搜配件，第一屏就能看见你。\n\n吉林这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想了解吉林这边怎么把存量维修客做起来，评论区扣「百应」，我私信你。\n\n——联想百应白陆，吉林"}, {"name": "陈凯奇", "region": "华北", "city": "鲁东", "cityShort": "鲁东", "topic": "#全球手机销量暴跌#", "topicLabel": "手机销量暴跌", "title": "【鲁东】全球手机销量暴跌，鲁东老板的账要重新算", "content": "各位老板，今天刷到一个消息——全球手机销量暴跌，同比少了十几个百分点。\n\n鲁东老板容易漏掉一件事：客户不换手机了，但客户手里的手机还要修、还要保养、还要换配件。\n\n这单子就在店里，问题是它不是自己走进来的。你要是不把服务亮出来、把入口摆到客户眼前，它就一直是你看得见摸不着的生意。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\n货和手艺这块，让你敢接大单。\n\n联想原装配件，品牌授权，不用到处找货、担心假货。品质有保障，利润空间更大，客单价自然也提得起来。\n\n鲁东这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想看鲁东这边怎么把这块业务接起来，评论区扣「百应」，我私信你。\n\n——联想百应陈凯奇，鲁东"}, {"name": "张松", "region": "华北", "city": "北京", "cityShort": "北京", "topic": "#iPhoneDuo开箱#", "topicLabel": "iPhoneDuo开箱", "title": "【北京】新机开箱潮来了，北京老板的旧机生意别放过", "content": "各位老板，今天刷到一个视频——iPhoneDuo开箱，评论区全是这个月要换机的人。\n\n今天满屏都是iPhoneDuo开箱，这事对北京老板来说不只是谈资。\n\n新机用户进店，第一件事就是问旧机怎么处理——回收、检测、换屏、换电池、恢复出厂。这些活儿你不接，这单就散在门口；你接了，客单价能翻好几倍。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\n货和手艺这块，让你敢接大单。\n\n联想原装配件，品牌授权，不用到处找货、担心假货。品质有保障，利润空间更大，客单价自然也提得起来。\n\n北京这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想看北京这边备货和回收怎么配，评论区扣「百应」，我把清单发你。\n\n——联想百应张松，北京"}, {"name": "李凯", "region": "华南", "city": "深圳", "cityShort": "深圳", "topic": "#iPhoneDuo开箱#", "topicLabel": "iPhoneDuo开箱", "title": "【深圳】iPhoneDuo开箱刷屏，深圳老板最该做的是这单", "content": "各位老板，今天刷到一个视频——iPhoneDuo开箱，评论区全是这个月要换机的人。\n\n深圳老板天天看着新机发布，这次开箱的热闹，不该只当热闹看。\n\n新机开箱，旧机就得处理。深圳换机的人多，可旧机怎么回收、怎么检测、怎么估价，你比客户清楚——这中间的信息差，就是你这一单的钱。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\n货和手艺这块，让你敢接大单。\n\n联想原装配件，品牌授权，不用到处找货、担心假货。品质有保障，利润空间更大，客单价自然也提得起来。\n\n深圳这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想了解深圳这边怎么把回收和维修做成套餐，评论区扣「百应」，我私信你。\n\n——联想百应李凯，深圳"}, {"name": "李剑锋", "region": "华南", "city": "深圳", "cityShort": "深圳", "topic": "#iPhoneDuo开箱#", "topicLabel": "iPhoneDuo开箱", "title": "【深圳】新机开箱潮，深圳老板别只盯着换机客", "content": "各位老板，今天刷到一个视频——iPhoneDuo开箱，评论区全是这个月要换机的人。\n\n同一条开箱视频，深圳老板能看出两层意思。\n\n第一层是新机客，第二层是旧机客。前者你已经会接，后者很多店还在推给回收商，白白把单子让出去。旧机检测、数据处理、换新机，旧机客是新机客的入口。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\n获客这块，百应帮你把入口全铺上。\n\n美团、高德、抖音全网营销，总部统一投放，你不用自己研究算法。客户在本地搜维修、搜配件，第一屏就能看见你。\n\n深圳这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想看深圳这边怎么把旧机客也接住，评论区扣「百应」，我私信你。\n\n——联想百应李剑锋，深圳"}, {"name": "黄铁创", "region": "华南", "city": "广州,佛山,清远", "cityShort": "广州,佛山,清远", "topic": "#iPhoneDuo开箱#", "topicLabel": "iPhoneDuo开箱", "title": "【广东】开箱潮下的旧机生意，广州佛山老板要接住", "content": "各位老板，今天刷到一个视频——iPhoneDuo开箱，评论区全是这个月要换机的人。\n\n广州、佛山、清远三地连着，换机潮是一起来的。\n\n开箱之后那台旧机，才是真金白银。可它停在客户手里，缺一个愿意上门取、愿意当面检测、愿意给明码标价的地方。这三件事你都能做到，客单价自然就上去了。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\n货和手艺这块，让你敢接大单。\n\n联想原装配件，品牌授权，不用到处找货、担心假货。品质有保障，利润空间更大，客单价自然也提得起来。\n\n广州,佛山,清远这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想了解广东这边怎么配齐回收和维修能力，评论区扣「百应」，我私信你。\n\n——联想百应黄铁创，广州,佛山,清远"}, {"name": "王进干", "region": "华南", "city": "广州,清远,佛山", "cityShort": "广州", "topic": "#iPhoneDuo开箱#", "topicLabel": "iPhoneDuo开箱", "title": "【广州】新机开箱带动的这波单子，广州老板别放过", "content": "各位老板，今天刷到一个视频——iPhoneDuo开箱，评论区全是这个月要换机的人。\n\n这条热搜广州老板看得最真切，因为满街都是拿新机的人。\n\n问题是新机客人多，回收和检测的承接能力有限，很多单子流给了回收商。客户换机时顺便把旧机处理了，你多一单服务、多一份信任，下次换机还找你。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\n获客这块，百应帮你把入口全铺上。\n\n美团、高德、抖音全网营销，总部统一投放，你不用自己研究算法。客户在本地搜维修、搜配件，第一屏就能看见你。\n\n广州这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想看广州这边怎么把获客和旧机业务一起做，评论区扣「百应」，我私信你。\n\n——联想百应王进干，广州,清远,佛山"}, {"name": "桑瑶瑶", "region": "华中", "city": "上海", "cityShort": "上海", "topic": "#iPhoneDuo开箱#", "topicLabel": "iPhoneDuo开箱", "title": "【上海】iPhoneDuo开箱，上海老板的客单价能翻倍", "content": "各位老板，今天刷到一个视频——iPhoneDuo开箱，评论区全是这个月要换机的人。\n\n上海换机节奏快，开箱潮一轮接一轮，机会也一轮接一轮。\n\n上海客户挑剔，价不明、检测不透明，人家就不换你。所以能不能把旧机这条线做起来，关键不在便宜，在于敢当面验、当面报价、敢承诺。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\n货和手艺这块，让你敢接大单。\n\n联想原装配件，品牌授权，不用到处找货、担心假货。品质有保障，利润空间更大，客单价自然也提得起来。\n\n上海这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想了解上海这边的服务怎么配，评论区扣「百应」，我私信你。\n\n——联想百应桑瑶瑶，上海"}, {"name": "熊新月", "region": "华中", "city": "宁波,金华,温州，台州，舟山", "cityShort": "浙南", "topic": "#iPhoneDuo开箱#", "topicLabel": "iPhoneDuo开箱", "title": "【浙南】新机开箱潮，宁波温州老板怎么多赚一单", "content": "各位老板，今天刷到一个视频——iPhoneDuo开箱，评论区全是这个月要换机的人。\n\n浙南这几个城，换机的人一直不少，这波开箱潮正好赶上。\n\n浙南老板不缺手艺，缺的是让客户愿意把旧机交给你处理的理由。检测透明、上门取送、价格说清，这三样做到，这单就是你自己的。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\n货和手艺这块，让你敢接大单。\n\n联想原装配件，品牌授权，不用到处找货、担心假货。品质有保障，利润空间更大，客单价自然也提得起来。\n\n浙南这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想看浙南这边怎么把旧机业务做起来，评论区扣「百应」，我私信你。\n\n——联想百应熊新月，宁波,金华,温州,台州,舟山"}, {"name": "胡琦博", "region": "华北", "city": "天津,保定,石家庄,邯郸,河北", "cityShort": "天津,河北", "topic": "#iPhoneDuo开箱#", "topicLabel": "iPhoneDuo开箱", "title": "【天津】开箱潮来了，天津河北老板准备好接这波单了吗", "content": "各位老板，今天刷到一个视频——iPhoneDuo开箱，评论区全是这个月要换机的人。\n\n天津加河北五城，新机一开箱，旧机就得处理，这事儿跑不掉。\n\n问题是很多店只做维修，不做回收和置换，客户拿着旧机问一圈就被劝走了。旧机检测、旧机换新、旧机抵价，这三条线一开，客单价和回头率一起上去。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\n获客这块，百应帮你把入口全铺上。\n\n美团、高德、抖音全网营销，总部统一投放，你不用自己研究算法。客户在本地搜维修、搜配件，第一屏就能看见你。\n\n天津,河北这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想了解天津河北这边怎么把旧机这单接住，评论区扣「百应」，我私信你。\n\n——联想百应胡琦博，天津,保定,石家庄,邯郸,河北"}, {"name": "王振兴", "region": "华中", "city": "杭州,嘉兴，绍兴，湖州，衢州，丽水", "cityShort": "浙北", "topic": "#突然发现已经无法停止使用AI了#", "topicLabel": "AI停不下来", "title": "【浙北】AI停不下来了，杭州老板的店还靠人肉接单吗", "content": "各位老板，今天刷到一个话题——突然发现已经无法停止使用AI了，这条直接上热搜了。\n\n杭州老板对AI应该不陌生，问题是用没用在店里。\n\n浙北六城的老板最容易干的一件事，是把报价、库存、客户跟进全扛在自己人身上。客户问个价要翻半天单子，写条朋友圈想半天，这哪是忙，这是把自己当机器用。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\nAI这块，百应直接配到你店里。\n\n百应AI主机，软硬服一体化。智能诊断、辅助报价、库存提醒、跟进话术，该提效的地方全给你接上。\n\n浙北这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想看AI到底能帮浙北的店省多少事，评论区扣「百应」，我给你演示一遍。\n\n——联想百应王振兴，杭州,嘉兴,绍兴,湖州,衢州,丽水"}, {"name": "胡伟", "region": "华中", "city": "南京,淮安，扬州，镇江，宿迁，徐州，连云港，泰州，南通，盐城", "cityShort": "江苏", "topic": "#突然发现已经无法停止使用AI了#", "topicLabel": "AI停不下来", "title": "【江苏】AI停不下来，十一城的老板用上AI能省多少事", "content": "各位老板，今天刷到一个话题——突然发现已经无法停止使用AI了，这条直接上热搜了。\n\n江苏十一个城铺开，这说明一件事：能把AI用起来的店，成本结构和效率完全是另一套。\n\n十一个城市跑下来，谁能把活儿标准化、谁能把经验复制出去，靠的都是工具不是蛮力。手工报价、纸质记账、靠脑子记客户，这些年还能撑，明年呢？\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\nAI这块，百应直接配到你店里。\n\n百应AI主机，软硬服一体化。智能诊断、辅助报价、库存提醒、跟进话术，该提效的地方全给你接上。\n\n江苏这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想看江苏这边怎么把AI配到店里，评论区扣「百应」，我私信你。\n\n——联想百应胡伟，南京,淮安,扬州,镇江,宿迁,徐州,连云港,泰州,南通,盐城"}, {"name": "袁程", "region": "华中", "city": "苏州", "cityShort": "苏州", "topic": "#突然发现已经无法停止使用AI了#", "topicLabel": "AI停不下来", "title": "【苏州】苏州老板还在手写报价？AI早就能干了", "content": "各位老板，今天刷到一个话题——突然发现已经无法停止使用AI了，这条直接上热搜了。\n\n苏州的老板对效率的敏感度应该比谁都高。\n\n可苏州有多少店还在手写报价单、还在用微信一个一个问、还在靠记忆记客户偏好？这些活儿花你两小时，工具十分钟。差别不在你不够努力，在你用的是老办法。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\nAI这块，百应直接配到你店里。\n\n百应AI主机，软硬服一体化。智能诊断、辅助报价、库存提醒、跟进话术，该提效的地方全给你接上。\n\n苏州这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想看苏州这边怎么把AI用进日常，评论区扣「百应」，我给你演示。\n\n——联想百应袁程，苏州"}, {"name": "王跃琦", "region": "华中", "city": "重庆", "cityShort": "重庆", "topic": "#突然发现已经无法停止使用AI了#", "topicLabel": "AI停不下来", "title": "【重庆】AI停不下来了，重庆老板的工具该换一轮了", "content": "各位老板，今天刷到一个话题——突然发现已经无法停止使用AI了，这条直接上热搜了。\n\n重庆老板行事快，工具跟不上人，就成了最大的浪费。\n\n客户来了要报价，你还在翻抽屉找配件价目；客户走了要跟进，你还在凭印象想他上次要啥。活儿是干完了，可你一天能接几个客户，全看手速。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\nAI这块，百应直接配到你店里。\n\n百应AI主机，软硬服一体化。智能诊断、辅助报价、库存提醒、跟进话术，该提效的地方全给你接上。\n\n重庆这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想了解重庆这边怎么用AI提效，评论区扣「百应」，我私信你。\n\n——联想百应王跃琦，重庆"}, {"name": "徐杰", "region": "华南", "city": "长沙,株洲，岳阳", "cityShort": "湖南", "topic": "#突然发现已经无法停止使用AI了#", "topicLabel": "AI停不下来", "title": "【湖南】AI停不下来，长沙株洲岳阳的老板别再手工做这些活", "content": "各位老板，今天刷到一个话题——突然发现已经无法停止使用AI了，这条直接上热搜了。\n\n湖南老板不缺拼劲，缺的是让工具替你干重复活的思路。\n\n报价、库存盘点、活动文案、老客提醒、朋友圈素材——这些活儿天天做，做十年还是天天做。会用AI的同行同样的时间能接两倍的单，差距就是这么拉开的。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\nAI这块，百应直接配到你店里。\n\n百应AI主机，软硬服一体化。智能诊断、辅助报价、库存提醒、跟进话术，该提效的地方全给你接上。\n\n湖南这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想看湖南这边怎么把AI落到店里，评论区扣「百应」，我私信你。\n\n——联想百应徐杰，长沙,株洲,岳阳"}, {"name": "田炎晖", "region": "华中", "city": "武汉,湖北", "cityShort": "武汉,湖北", "topic": "#突然发现已经无法停止使用AI了#", "topicLabel": "AI停不下来", "title": "【武汉】AI停不下来了，武汉老板的店还能这么干", "content": "各位老板，今天刷到一个话题——突然发现已经无法停止使用AI了，这条直接上热搜了。\n\n武汉老板应该有感觉，身边会用AI的同行越来越多了。\n\n湖北的市场不缺客户，缺的是你能不能用同样的时间服务更多客户。AI做智能诊断、辅助报价、自动提醒库存，这些不是概念，是你明天就能用上的东西。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\nAI这块，百应直接配到你店里。\n\n百应AI主机，软硬服一体化。智能诊断、辅助报价、库存提醒、跟进话术，该提效的地方全给你接上。\n\n武汉,湖北这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想看武汉这边AI能落到哪几步，评论区扣「百应」，我给你演示。\n\n——联想百应田炎晖，武汉,湖北"}, {"name": "张小丽", "region": "华中", "city": "成都", "cityShort": "成都", "topic": "#突然发现已经无法停止使用AI了#", "topicLabel": "AI停不下来", "title": "【成都】AI停不下来，成都老板用AI接单有多快", "content": "各位老板，今天刷到一个话题——突然发现已经无法停止使用AI了，这条直接上热搜了。\n\n成都的老板爱尝鲜，但尝鲜之后要真落到店里才行。\n\n很多老板试了两天AI就放弃了，因为不知道怎么嵌进自己的流程。其实不用推倒重来——报价这一件事先改，客户跟进这一件事先改，一个月就能看出差别。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\nAI这块，百应直接配到你店里。\n\n百应AI主机，软硬服一体化。智能诊断、辅助报价、库存提醒、跟进话术，该提效的地方全给你接上。\n\n成都这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想看成都这边具体怎么落地，评论区扣「百应」，我私信你。\n\n——联想百应张小丽，成都"}, {"name": "杨浩", "region": "华中", "city": "成都,宜宾", "cityShort": "成都,宜宾", "topic": "#突然发现已经无法停止使用AI了#", "topicLabel": "AI停不下来", "title": "【成都】同行都在用AI了，成都宜宾的老板还在等", "content": "各位老板，今天刷到一个话题——突然发现已经无法停止使用AI了，这条直接上热搜了。\n\n成都和宜宾的老板都在观望，可观望是有成本的。\n\n同行拿AI省下的时间，都变成了多接的客户、多做的单子。你等的不是新工具，是别人拉开差距的那段时间。工具已经现成了，用不用才是问题。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\nAI这块，百应直接配到你店里。\n\n百应AI主机，软硬服一体化。智能诊断、辅助报价、库存提醒、跟进话术，该提效的地方全给你接上。\n\n成都,宜宾这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想看成都宜宾这边怎么用起来，评论区扣「百应」，我私信你。\n\n——联想百应杨浩，成都,宜宾"}, {"name": "何建岳", "region": "华中", "city": "兰州,银川，乌鲁木齐，西宁", "cityShort": "西北", "topic": "#应届生苦等1个月复试却被告知岗位已满#", "topicLabel": "岗位已满", "title": "【西北】岗位满了别灰心，西北老板这里有门生意", "content": "各位老板，今天看到一个消息——应届生苦等1个月复试，却被告知岗位已满。评论区炸了。\n\n兰州、银川、乌鲁木齐、西宁的老板，评论区有人说得挺实在——找不到工作不一定是能力问题，是缺个能自己出结果的场子。\n\n这行门槛低、需求稳、有技术壁垒，本地开个店，客源、供应链、工具全都现成。跟投简历不一样，这是你自己的小生意，做起来了客户是你的，不用看谁脸色。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\n获客这块，百应帮你把入口全铺上。\n\n美团、高德、抖音全网营销，总部统一投放，你不用自己研究算法。客户在本地搜维修、搜配件，第一屏就能看见你。\n\n西北这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想了解西北这边具体怎么起步，评论区扣「百应」，我私信你一份开店测算。\n\n——联想百应何建岳，兰州,银川,乌鲁木齐,西宁"}, {"name": "李琦", "region": "华南", "city": "南宁,桂林", "cityShort": "广西", "topic": "#应届生苦等1个月复试却被告知岗位已满#", "topicLabel": "岗位已满", "title": "【广西】找不到工作？南宁桂林老板的店缺人缺客", "content": "各位老板，今天看到一个消息——应届生苦等1个月复试，却被告知岗位已满。评论区炸了。\n\n南宁、桂林的老板，这条热搜对你们其实是好消息。\n\n现在有想法、有技术、肯吃苦的人越来越多，缺的恰恰是能让他们自己干起来的地方。修电脑这行不需要你有多大资本，需要的是肯把这当自己事业的人。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\n获客这块，百应帮你把入口全铺上。\n\n美团、高德、抖音全网营销，总部统一投放，你不用自己研究算法。客户在本地搜维修、搜配件，第一屏就能看见你。\n\n广西这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想了解广西这边怎么起步，评论区扣「百应」，我私信你。\n\n——联想百应李琦，南宁,桂林"}, {"name": "赵珂", "region": "华南", "city": "贵阳,昆明", "cityShort": "云贵", "topic": "#应届生苦等1个月复试却被告知岗位已满#", "topicLabel": "岗位已满", "title": "【云贵】毕业季的另一条路，贵阳昆明老板自己就是老板", "content": "各位老板，今天看到一个消息——应届生苦等1个月复试，却被告知岗位已满。评论区炸了。\n\n贵阳、昆明的老板，最清楚在云南贵州做成一门生意是什么感觉。\n\n投简历被拒，评论区都在说难。但你换个角度：与其在别人的公司里挤一个位置，不如自己开一个能长期做下去的小店。技术你有，缺的是平台和客源。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\n货和手艺这块，让你敢接大单。\n\n联想原装配件，品牌授权，不用到处找货、担心假货。品质有保障，利润空间更大，客单价自然也提得起来。\n\n云贵这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想了解云贵这边怎么起步，评论区扣「百应」，我私信你。\n\n——联想百应赵珂，贵阳,昆明"}, {"name": "郭凯", "region": "华南", "city": "福州,福建", "cityShort": "福建", "topic": "#应届生苦等1个月复试却被告知岗位已满#", "topicLabel": "岗位已满", "title": "【福建】岗位卷不动了，福州老板的生意是另一种出路", "content": "各位老板，今天看到一个消息——应届生苦等1个月复试，却被告知岗位已满。评论区炸了。\n\n福州老板，这条消息可能戳到你了。\n\n一整年投简历，最后被告知岗位已满，这事搁谁身上都堵。但福州本地做电脑维修，其实有另一条路——不是抢别人的位置，是自己造一个位置。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\n获客这块，百应帮你把入口全铺上。\n\n美团、高德、抖音全网营销，总部统一投放，你不用自己研究算法。客户在本地搜维修、搜配件，第一屏就能看见你。\n\n福建这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想了解福建这边怎么起步，评论区扣「百应」，我私信你。\n\n——联想百应郭凯，福州,福建"}, {"name": "丁美平", "region": "华南", "city": "安徽", "cityShort": "安徽", "topic": "#应届生苦等1个月复试却被告知岗位已满#", "topicLabel": "岗位已满", "title": "【安徽】工作难找不如自己干，安徽老板的门道在这", "content": "各位老板，今天看到一个消息——应届生苦等1个月复试，却被告知岗位已满。评论区炸了。\n\n安徽的老板，这条热搜对你们算是个引子。\n\n与其在别人公司里等一个不确定的位置，不如自己干一个能说了算的生意。修电脑这行，客户能积累，技术能沉淀，越做越值钱。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\n获客这块，百应帮你把入口全铺上。\n\n美团、高德、抖音全网营销，总部统一投放，你不用自己研究算法。客户在本地搜维修、搜配件，第一屏就能看见你。\n\n安徽这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想了解安徽这边怎么起步，评论区扣「百应」，我私信你。\n\n——联想百应丁美平，安徽"}, {"name": "韦娇月", "region": "华南", "city": "安徽", "cityShort": "安徽", "topic": "#应届生苦等1个月复试却被告知岗位已满#", "topicLabel": "岗位已满", "title": "【安徽】应届生看过来，安徽老板店里的真实机会", "content": "各位老板，今天看到一个消息——应届生苦等1个月复试，却被告知岗位已满。评论区炸了。\n\n安徽的年轻朋友，别被一条热搜带偏了方向。\n\n投简历被拒确实难受，但做这门生意的人告诉你：客户不会因为你简历上少一行字就不来修电脑。真实的市场需求在这儿，就看你敢不敢自己接。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\n货和手艺这块，让你敢接大单。\n\n联想原装配件，品牌授权，不用到处找货、担心假货。品质有保障，利润空间更大，客单价自然也提得起来。\n\n安徽这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想了解安徽这边怎么起步，评论区扣「百应」，我私信你一份开店测算。\n\n——联想百应韦娇月，安徽"}, {"name": "王芳颖", "region": "总部", "city": "成都", "cityShort": "成都", "topic": "#应届生苦等1个月复试却被告知岗位已满#", "topicLabel": "岗位已满", "title": "【成都】别人在投简历，答案在成都的门店里", "content": "各位老板，今天看到一个消息——应届生苦等1个月复试，却被告知岗位已满。评论区炸了。\n\n成都的年轻朋友，这条热搜你该好好看看。\n\n一个月等来一句岗位已满，这种事听得多了心里会凉。但成都街头有多少家门店正等着能上手、肯跟客户打交道的技术人？\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\n获客这块，百应帮你把入口全铺上。\n\n美团、高德、抖音全网营销，总部统一投放，你不用自己研究算法。客户在本地搜维修、搜配件，第一屏就能看见你。\n\n成都这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想了解成都这边怎么起步，评论区扣「百应」，我私信你。\n\n——联想百应王芳颖，成都"}, {"name": "李娜", "region": "总部", "city": "全国", "cityShort": "全国", "topic": "#应届生苦等1个月复试却被告知岗位已满#", "topicLabel": "岗位已满", "title": "【全国】岗位已满不是终点：29省200城1000店的生意机会", "content": "各位老板，今天看到一个消息——应届生苦等1个月复试，却被告知岗位已满。评论区炸了。\n\n电脑维修的老板们，我先说个身边的情况——有朋友的孩子投了一年简历没下文，转头自己开了间维修店，现在忙得脚不沾地。\n\n岗位满了，说明市场不缺想上班的人，缺的是能自己扛事的人。修电脑这门生意门槛不高但有壁垒：技术能积累、客户能沉淀、越做越值钱。29个省、200多个城市、1000多家门店的成熟路子，现在都能接得上。\n\n这时候，你需要借力。\n\n联想百应——全国连锁IT服务品牌，覆盖29个省份、200多个城市、1000多家门店。\n\nAI这块，百应直接配到你店里。\n\n百应AI主机，软硬服一体化。智能诊断、辅助报价、库存提醒、跟进话术，该提效的地方全给你接上。\n\n全国这边已经有不少门店加入联想百应，客流和营收都稳住了。\n\n想了解怎么加入，评论区扣「百应」，我私信你一份完整的对比资料。\n\n——联想百应李娜，全国"}]</script>
 <script>
-function copyScript(id) {
-  var el = document.getElementById(id);
-  var text = el.firstChild.textContent || el.textContent;
-  // Remove button text that got included
-  text = text.replace(/复制脚本\s*$/g, '').trim();
-  navigator.clipboard.writeText(text).then(function() {
-    var btn = el.querySelector('.copy-btn');
-    var orig = btn.textContent;
-    btn.textContent = '已复制!';
-    btn.style.background = '#22C55E';
-    setTimeout(function() {
-      btn.textContent = orig;
-      btn.style.background = '#D8000F';
-    }, 1500);
-  });
+const DATA = JSON.parse(document.getElementById('csdata').textContent);
+const REGIONS = ['全部','华北','华南','华中','总部'];
+const regionSel = document.getElementById('regionSel');
+const nameSel = document.getElementById('nameSel');
+const listEl = document.getElementById('list');
+const countEl = document.getElementById('count');
+
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 1600);
 }
+
+function fillRegions(){
+  regionSel.innerHTML = REGIONS.map(r => '<option value="'+r+'">'+r+'</option>').join('');
+}
+
+function fillNames(){
+  const r = regionSel.value;
+  const list = DATA.filter(d => r === '全部' || d.region === r);
+  const opts = list.map(d => '<option value="'+d.name+'">'+d.name+'　('+d.city+')</option>').join('');
+  nameSel.innerHTML = '<option value="__all__">全部 ('+list.length+')</option>' + opts;
+}
+
+function render(){
+  const r = regionSel.value;
+  const n = nameSel.value;
+  let list = DATA.filter(d => (r === '全部' || d.region === r));
+  if (n !== '__all__') list = list.filter(d => d.name === n);
+  countEl.innerHTML = '当前显示 <b>'+list.length+'</b> / '+DATA.length+' 条脚本';
+  if (!list.length){ listEl.innerHTML = '<div class="empty">没有匹配的脚本</div>'; return; }
+  listEl.innerHTML = list.map((d,i) => {
+    const ini = d.name.slice(0,1);
+    return '<div class="card">'
+      + '<div class="chead">'
+      +   '<div class="avatar">'+ini+'</div>'
+      +   '<div class="cinfo">'
+      +     '<div class="cname">'+d.name+'</div>'
+      +     '<div class="cmeta"><span class="badge">'+d.region+'</span><span class="badge">'+d.city+'</span></div>'
+      +     '<div class="chot">'+d.topic+'</div>'
+      +   '</div>'
+      + '</div>'
+      + '<div class="ctitle">'+d.title+'</div>'
+      + '<div class="cbody">'+d.content+'</div>'
+      + '<button class="btn" data-n="'+d.name+'">📋 复制脚本</button>'
+      + '</div>';
+  }).join('');
+  listEl.querySelectorAll('.btn').forEach(b => b.addEventListener('click', () => copyScript(b.dataset.n, b)));
+}
+
+function copyScript(name, btn){
+  const d = DATA.find(x => x.name === name);
+  const text = d.title + '\n\n' + d.content;
+  const done = () => { btn.textContent = '✅ 已复制'; btn.classList.add('done'); toast('脚本已复制，粘贴去录'); setTimeout(()=>{btn.textContent='📋 复制脚本';btn.classList.remove('done');}, 1800); };
+  if (navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(text).then(done).catch(()=>fallback(text, done));
+  } else { fallback(text, done); }
+}
+
+function fallback(text, done){
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch(e){ toast('请长按选中文本手动复制'); }
+  document.body.removeChild(ta);
+}
+
+regionSel.addEventListener('change', () => { fillNames(); render(); });
+nameSel.addEventListener('change', render);
+fillRegions();
+fillNames();
+render();
 </script>
 </body>
 </html>
