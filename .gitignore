@@ -1,0 +1,11 @@
+# 依赖
+node_modules/
+*.log
+
+# 系统
+.DS_Store
+Thumbs.db
+
+# 临时
+*.tmp
+~$*

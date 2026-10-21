@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CS热点短视频脚本 · 2026-10-21</title>
+<style>
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f5f5f5;
+    margin: 0;
+    padding: 20px;
+    color: #1a1a1a;
+  }
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .header {
+    background: linear-gradient(135deg, #1C1410, #D8000F);
+    color: white;
+    padding: 24px 28px;
+    border-radius: 12px 12px 0 0;
+    margin-bottom: 0;
+  }
+  .header h1 {
+    margin: 0 0 6px 0;
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .header p {
+    margin: 0;
+    font-size: 13px;
+    opacity: 0.85;
+  }
+  .card {
+    background: white;
+    border-radius: 0 0 12px 12px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+  .card-header {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-header.red { background: #FFF5F5; border-left: 4px solid #D8000F; }
+  .card-header.blue { background: #F0F4FF; border-left: 4px solid #3B82F6; }
+  .card-header.green { background: #F0FFF4; border-left: 4px solid #22C55E; }
+  .card-header.purple { background: #F5F0FF; border-left: 4px solid #8B5CF6; }
+  .tag {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .tag-red { background: #D8000F; color: white; }
+  .tag-blue { background: #3B82F6; color: white; }
+  .tag-green { background: #22C55E; color: white; }
+  .tag-purple { background: #8B5CF6; color: white; }
+  .hot-tag {
+    font-size: 11px;
+    color: #888;
+    background: #f0f0f0;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .card-body {
+    padding: 16px 20px 20px;
+  }
+  .script-box {
+    background: #FAFAFA;
+    border: 1px solid #EBEBEB;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 15px;
+    line-height: 1.9;
+    color: #333;
+    white-space: pre-wrap;
+    position: relative;
+  }
+  .copy-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #D8000F;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .copy-btn:hover { background: #b3000c; }
+  .footer {
+    text-align: center;
+    color: #aaa;
+    font-size: 12px;
+    margin-top: 24px;
+    padding-bottom: 20px;
+  }
+  .step-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #D8000F;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>🔥 CS热点短视频脚本 · 10月21日</h1>
+    <p>联想百应 · CS城市经理专用 · 热点来源：微博热搜</p>
+  </div>
+
+  <!-- 脚本① -->
+  <div class="card">
+    <div class="card-header red">
+      <span class="tag tag-red">📱 脚本①</span>
+      <span class="hot-tag">#全球手机销量暴跌#</span>
+    </div>
+    <div class="card-body">
+      <div class="step-label">角度：手机销量跌 → 维修需求涨</div>
+      <div class="script-box" id="script1">各位老板，今天看到一个消息——全球手机销量暴跌！
+
+以前手机用两年就换，现在大家都在省钱，一部手机用三四年。
+
+但手机越用越慢、屏幕碎了、电池不行了——修手机的需求反而在涨！
+
+加入百应，美团+抖音帮你把店推到周边3公里内有需要的人，运营商合作帮你接大单，29省200+城市1000家门店都在用。
+
+手机卖不动了，修手机才是未来！
+
+想了解的，评论区扣"百应"，我私信你。<button class="copy-btn" onclick="copyScript('script1')">复制脚本</button></div>
+    </div>
+  </div>
+
+  <!-- 脚本② -->
+  <div class="card">
+    <div class="card-header blue">
+      <span class="tag tag-blue">🤖 脚本②</span>
+      <span class="hot-tag">#突然发现已经无法停止使用AI了#</span>
+    </div>
+    <div class="card-body">
+      <div class="step-label">角度：AI时代 → 跟上就赢</div>
+      <div class="script-box" id="script2">各位老板，今天刷到一个帖子——很多人说已经无法停止使用AI了。
+
+你以为AI只会写文章？错了。
+修电脑的同行已经在用AI做故障诊断、自动报价、回复客户了。
+
+你还在手动录单、记库存、打电话？
+
+加入百应，平台提供AI辅助工具帮你提升效率，美团+抖音全网获客让你不用再发小广告，运营商项目（宽带、监控、门禁）帮你接大单。
+
+AI来了，跟上的吃肉，跟不上的出局。
+
+想了解的，评论区扣"百应"，我私信你。<button class="copy-btn" onclick="copyScript('script2')">复制脚本</button></div>
+    </div>
+  </div>
+
+  <!-- 脚本③ -->
+  <div class="card">
+    <div class="card-header green">
+      <span class="tag tag-green">💼 脚本③</span>
+      <span class="hot-tag">#应届生苦等1个月复试却被告知岗位已满#</span>
+    </div>
+    <div class="card-body">
+      <div class="step-label">角度：就业难 → 修电脑是出路</div>
+      <div class="script-box" id="script3">各位老板，今天看到一个扎心的话题——应届生等了一个月，复试被告知岗位没了。
+
+打工人越来越难，但你知道吗？很多修电脑的老板一个月能挣两三万，不靠学历靠技术。
+
+问题是：你自己干，和跟着平台一起干，是两回事。
+
+加入百应，不用自己从零摸索，平台给你流量、给你供应链、给你运营商项目，美团+抖音帮你获客，29省200+城市1000家门店经验直接复制。
+
+打工没出路，不如自己当老板。
+
+想了解的，评论区扣"百应"，我私信你。<button class="copy-btn" onclick="copyScript('script3')">复制脚本</button></div>
+    </div>
+  </div>
+
+  <!-- 脚本④ -->
+  <div class="card">
+    <div class="card-header purple">
+      <span class="tag tag-purple">📱 脚本④</span>
+      <span class="hot-tag">#iPhoneDuo开箱#</span>
+    </div>
+    <div class="card-body">
+      <div class="step-label">角度：折叠屏新品 → 维修需求爆发</div>
+      <div class="script-box" id="script4">各位老板，iPhone Duo折叠手机刚刚开售了！
+
+折叠屏手机，屏幕折来折去，最容易坏的就是这块屏。以前苹果换屏动不动上千，现在折叠屏只会更贵。
+
+你是不是还守着旧模式，等客户上门？
+
+加入百应，美团+抖音帮你主动找到周边有维修需求的人，不用等客户，靠平台流量就够你忙。
+
+折叠屏来了，专业维修的春天来了！
+
+想了解的，评论区扣"百应"，我私信你。<button class="copy-btn" onclick="copyScript('script4')">复制脚本</button></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    联想百应 · CS渠道新媒体营销 · 每日自动生成<br>
+    明早8:30自动更新下一工作日脚本
+  </div>
+</div>
+
+<script>
+function copyScript(id) {
+  var el = document.getElementById(id);
+  var text = el.firstChild.textContent || el.textContent;
+  // Remove button text that got included
+  text = text.replace(/复制脚本\s*$/g, '').trim();
+  navigator.clipboard.writeText(text).then(function() {
+    var btn = el.querySelector('.copy-btn');
+    var orig = btn.textContent;
+    btn.textContent = '已复制!';
+    btn.style.background = '#22C55E';
+    setTimeout(function() {
+      btn.textContent = orig;
+      btn.style.background = '#D8000F';
+    }, 1500);
+  });
+}
+</script>
+</body>
+</html>
