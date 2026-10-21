@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CS热点脚本库 · 联想百应</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#f5f6f8;color:#1a1a2e;padding:16px;line-height:1.7}
+.wrap{max-width:720px;margin:0 auto}
+.hero{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border-radius:16px;padding:28px 22px;margin-bottom:18px}
+.hero h1{font-size:24px;font-weight:700;margin-bottom:8px}
+.hero p{font-size:14px;opacity:.9}
+.tag{display:inline-block;background:rgba(255,255,255,.2);border-radius:20px;padding:4px 14px;font-size:12px;margin:10px 4px 0 0}
+.card{background:#fff;border-radius:12px;padding:18px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.card h2{font-size:17px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.card h2::before{content:'';width:4px;height:16px;background:#667eea;border-radius:2px}
+.item{border:1px solid #e8e8f0;border-radius:10px;padding:14px;margin-bottom:10px}
+.item h3{font-size:15px;font-weight:700;margin-bottom:6px}
+.item .meta{font-size:12px;color:#888;margin-bottom:10px}
+.item .body{font-size:14px;color:#333;white-space:pre-line;background:#fafafc;border-radius:8px;padding:12px}
+.btn{display:block;width:100%;margin-top:10px;background:#667eea;color:#fff;border:none;border-radius:8px;padding:11px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn:active{background:#5568d3}
+.hint{font-size:13px;color:#666;background:#fff8e1;border-left:3px solid #f0a500;padding:10px 12px;border-radius:0 8px 8px 0;margin-bottom:14px}
+.footer{text-align:center;font-size:12px;color:#999;padding:20px 0}
+.toast{position:fixed;left:50%;bottom:40px;transform:translateX(-50%);background:rgba(0,0,0,.8);color:#fff;padding:10px 22px;border-radius:20px;font-size:14px;opacity:0;transition:opacity .25s;pointer-events:none}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <h1>🔥 CS热点脚本库</h1>
+    <p>联想百应 · 渠道新媒体营销 · 每日热点短视频脚本</p>
+    <div>
+      <span class="tag">34位CS专用</span>
+      <span class="tag">每日8:30更新</span>
+      <span class="tag">30秒口播</span>
+      <span class="tag">直接复制去录</span>
+    </div>
+  </div>
+
+  <div class="hint">
+    👉 点下面每条的「复制脚本」，粘贴到备忘录或直接念。抖音+视频号双平台都发。
+  </div>
+
+  <div class="card">
+    <h2>今日脚本 · 2026-10-21</h2>
+    <div id="list">加载中…</div>
+  </div>
+
+  <div class="card">
+    <h2>怎么用</h2>
+    <div style="font-size:14px;color:#444">
+      <p style="margin-bottom:8px">1️⃣ 挑一条跟自己客户最相关的热点脚本</p>
+      <p style="margin-bottom:8px">2️⃣ 手机对着自己录，<b>第一句必须点出热点事件</b></p>
+      <p style="margin-bottom:8px">3️⃣ 一定要加字幕，老板们静音刷得多</p>
+      <p style="margin-bottom:8px">4️⃣ 抖音 + 视频号都发，别只发一个</p>
+      <p style="margin-bottom:8px">5️⃣ 评论区有人扣「百应」，截图发工仔，我来跟进</p>
+      <p style="color:#888;font-size:13px;margin-top:10px">拍摄时长控制在30秒内，语速稍快，结尾停在"评论区扣百应"上。</p>
+    </div>
+  </div>
+
+  <div class="footer">超级工仔出品 · 上线即干活<br>GitHub: leena-free/cs-hot-scripts</div>
+</div>
+<div class="toast" id="toast">已复制 ✅</div>
+
+<script>
+const SCRIPTS = [
+  {
+    tag: "#全球手机销量暴跌#",
+    title: "手机销量暴跌，老板们的机会来了",
+    body: "各位老板，今天刷到一个消息——全球手机销量暴跌，同比少了十几个百分点。\n\n你别慌，这事跟你反而有关系。以前一个客人坏了手机就换新的，现在呢，很多人千元机一用三年，修一修接着用。\n\n对咱们修电脑修手机的人来说，这就是生意。以前换机的人现在改成修，修一次赚一次，粘性还更高。\n\n怎么接住这波人？很简单，把维修这件小事做成全网能搜到、能下单的服务。\n\n现在加入百应，29个省、200多个城市、1000多家门店都在用。店开在本地，客人从美团、高德、抖音都能找到你，运营商那边的合作也能一起做。\n\n想了解怎么接这波修旧手机的客人，评论区扣个"百应"，我私信你。"
+  },
+  {
+    tag: "#突然发现已经无法停止使用AI了#",
+    title: "AI停不下来了，但门店还靠老办法",
+    body: "各位老板，今天刷到一个话题——突然发现已经无法停止使用AI了。这条直接上热搜了。\n\n我自己也是这样，现在查个报价、想个活动方案，几秒钟就出来了。但这事儿有个尴尬的地方：会用AI的人越来越多了，门店老板这一行，还是老办法。\n\n客户问个价，你翻半天单子；写个朋友圈文案，想半天；判断该不该进这批货，靠感觉。\n\n其实这些都能交给AI。现在加入百应，不只是给你供货和流量，还把AI工具直接配到你店里来。报价、库存、客户跟进，该提效的地方全给你接上。\n\n29个省、200多个城市、1000多家门店已经在用了。\n\n想看看AI到底能帮你的店省多少事，评论区扣"百应"，我给你演示一遍。"
+  },
+  {
+    tag: "#应届生苦等1个月复试却被告知岗位已满#",
+    title: "岗位满了别慌，来看门生意",
+    body: "各位老板，今天看到一个消息——应届生苦等1个月复试，却被告知岗位已满。评论区炸了，都在说工作太难找。\n\n但我想说句实在话：找不到工作的人，不一定缺能力，是缺一个能自己产出结果的场子。\n\n现在修电脑这行，门槛低、需求稳、有技术壁垒。你在本地开一个店，接美团、抖音全网获客，运营商那边还有合作可以加，AI工具帮你把效率提上来。\n\n这不是一份要投简历的工作，是你自己的小生意。做起来了，客户是你的，不用看别人脸色。\n\n现在加入百应，29个省、200多个城市、1000多家门店，成熟的路子现成的。\n\n想了解具体怎么起步，评论区扣"百应"，我私信你一份开店测算。"
+  },
+  {
+    tag: "#iPhoneDuo开箱#",
+    title: "新机开箱潮，就是你的进店潮",
+    body: "各位老板，今天刷到一条——iPhoneDuo开箱。评论区全是这个月要换机的人。\n\n这就说明一件事，接下来这一个月，是换机的高峰期。\n\n新机开箱，旧机怎么办？旧机不得处理、不得转手、不得恢复出厂？这里面全是钱。\n\n新机用户进店，第一件事就是问旧机能怎么处理。你要是这时候备好了回收、检测、换屏、换电池的服务，客单价能翻好几倍。\n\n怎么备货不压手？现在加入百应，29个省、200多个城市、1000多家门店都在用，机型备货和流量都有现成方案，美团、高德、抖音一起给你铺。\n\n想抓住这波开箱潮，评论区扣"百应"，我把备货清单发你。"
+  }
+];
+
+function render(){
+  const box = document.getElementById('list');
+  box.innerHTML = SCRIPTS.map((s,i)=>`
+    <div class="item">
+      <h3>${i+1}. ${s.title}</h3>
+      <div class="meta">${s.tag}</div>
+      <div class="body" id="body${i}">${s.body}</div>
+      <button class="btn" onclick="copyScript(${i})">📋 复制脚本</button>
+    </div>
+  `).join('');
+}
+
+function copyScript(i){
+  const text = SCRIPTS[i].body;
+  const done = ()=>{ const t=document.getElementById('toast'); t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600); };
+  if (navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(text).then(done).catch(()=>fallback(text,done));
+  } else { fallback(text,done); }
+}
+
+function fallback(text, done){
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); done(); } catch(e){ alert('复制失败，请长按选中文本'); }
+  document.body.removeChild(ta);
+}
+
+render();
+</script>
+</body>
+</html>
