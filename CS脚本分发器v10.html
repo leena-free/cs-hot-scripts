@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CS脚本分发器 V10 · 最终版</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#f5f5f5;color:#1a1a1a;}
+header{background:#1a1a2e;color:#fff;padding:18px 32px;}
+header h1{font-size:19px;font-weight:700;margin-bottom:3px;}
+header p{font-size:12px;color:#888;}
+
+
+.filters{background:#fff;padding:12px 32px;border-bottom:1px solid #eee;display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
+.filter-group{display:flex;align-items:center;gap:7px;}
+.filter-group label{font-size:11px;color:#666;font-weight:600;white-space:nowrap;}
+.filter-group select{padding:4px 9px;border:1px solid #ddd;border-radius:5px;font-size:11px;min-width:100px;background:#fff;cursor:pointer;}
+.stats{margin-left:auto;font-size:11px;color:#888;}
+.stats strong{color:#D8000F;}
+.stats .green{color:#2e7d32;}
+.container{max-width:1200px;margin:0 auto;padding:16px 32px;}
+.section-label{font-size:11px;color:#888;margin:16px 0 10px;padding-left:4px;border-left:3px solid #D8000F;font-weight:700;display:flex;align-items:center;gap:7px;}
+.badge-count{background:#D8000F;color:#fff;border-radius:10px;padding:1px 6px;font-size:10px;}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:12px;}
+.card{background:#fff;border-radius:10px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.06);transition:box-shadow .2s,transform .2s;border:1px solid #eee;position:relative;}
+.card:hover{box-shadow:0 4px 14px rgba(0,0,0,.1);transform:translateY(-1px);}
+.card.gen-new{border-color:#D8000F;background:#fffafc;}
+.card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px;gap:7px;}
+.card-title{font-size:12px;font-weight:700;color:#1a1a2e;line-height:1.5;flex:1;}
+.badge{font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600;white-space:nowrap;flex-shrink:0;}
+.badge-north{background:#e3f2fd;color:#1565c0;}
+.badge-south{background:#e8f5e9;color:#2e7d32;}
+.badge-central{background:#fff3e0;color:#e65100;}
+.badge-hq{background:#f3e5f5;color:#7b1fa2;}
+.card-meta{font-size:10px;color:#888;margin-bottom:7px;}
+.card-meta strong{color:#333;}
+.card-meta span{margin-right:10px;}
+.card-desc{font-size:10px;color:#888;background:#f8f8f8;border-radius:5px;padding:6px 8px;margin-bottom:8px;border-left:3px solid #D8000F;line-height:1.5;}
+.card-content{font-size:11px;color:#444;line-height:1.75;max-height:130px;overflow:hidden;position:relative;transition:max-height .3s ease;}
+.card-content::after{content:"";position:absolute;bottom:0;left:0;right:0;height:40px;background:linear-gradient(transparent,#fff);pointer-events:none;}
+.card-content.expanded{max-height:9999px;overflow:visible;}
+.card-content.expanded::after{display:none;}
+.card-actions{display:flex;align-items:center;gap:7px;margin-top:7px;}
+.expand-btn{display:inline-block;font-size:10px;color:#1a1a2e;cursor:pointer;user-select:none;font-weight:600;padding:3px 0;pointer-events:auto;}
+.expand-btn:hover{color:#D8000F;}
+.copy-btn{margin-left:auto;background:#1a1a2e;color:#fff;border:none;padding:4px 12px;border-radius:5px;font-size:10px;font-weight:600;cursor:pointer;transition:background .2s;flex-shrink:0;pointer-events:auto;}
+.copy-btn:hover{background:#D8000F;}
+.copy-btn.copied{background:#2e7d32;}
+.no-result{text-align:center;padding:50px 0;color:#bbb;font-size:14px;display:none;}
+.no-result::before{content:"📭";display:block;font-size:36px;margin-bottom:10px;}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#fff;padding:10px 20px;border-radius:8px;font-size:12px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;}
+footer{text-align:center;padding:18px;font-size:11px;color:#bbb;margin-top:16px;}
+</style>
+</head>
+<body>
+
+<header>
+ <h1>📋 CS脚本分发器 V10 · 差异化版</h1>
+ <p>短视频矩阵分析 · 34条方案差异化版 · 一键复制</p>
+</header>
+
+ <div class="upload-zone" style="background:#fafafa;border-bottom:1px solid #eee;padding:12px 32px;display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;">
+ <input type="file" id="fileInput" accept=".docx,.json,.txt,.md,.html" onchange="handleFileSelect(this)" style="font-size:12px;">
+ <textarea id="textInput" placeholder="或者直接粘贴文字内容..." rows="2" style="flex:1;min-width:200px;font-size:12px;padding:6px 9px;border:1px solid #ddd;border-radius:5px;resize:vertical;font-family:inherit;">大家好，我是联想百应的张继霖，主要负责华北地区的业务。
+华北地区的电脑维修店老板们，你们有没有发现，现在大家修电脑第一个想到的不是线下门店，而是去美团、大众点评上找？
+
+联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。
+但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。
+
+
+第一是通过全网营销解决了当下的获客难问题。联想百应进驻美团、高德、抖音等各大流量平台形成战略合作，依托线上流量持续赋能线下门店获客增收；同时联动移动、电信等运营商打造IT+CT服务新模式，将AI-IT服务融合到运营商的专线业务中，解决他们的客户IT服务问题，同时依托服务商为中小企业与政企客户做服务交付。
+
+这样不仅解决了当下门店营收增长难题，在AI浪潮中联想百应在IT服务行业走在了最前列。依托百应AI主机软硬服一体化战略，我们将赋能联想百应服务中心具备独有的AI交付能力，与服务商共享AI经济的红利。
+
+我们华北已经有大量门店验证，加入后平均每月新增客户30单以上，获客成本下降40%。
+
+联想百应全国29个省、200多个城市、1000多家门店，期待你的加入！想了解更多，评论区扣「想了解」，我私信你。
+
+——张继霖</textarea>
+ <button onclick="processText()" style="background:#1a1a2e;color:#fff;border:none;padding:6px 16px;border-radius:5px;font-size:12px;cursor:pointer;white-space:nowrap;">解析内容</button>
+</div>
+<div id="uploadResult" style="display:none;background:#fffde7;border-bottom:1px solid #ffe58f;padding:10px 32px;font-size:12px;color:#8a6d3b;"></div>
+
+<div class="filters">
+  <div class="filter-group">
+   <label>大区</label>
+   <select id="regionFilter" onchange="filterCards()">
+    <option value="">全部大区</option>
+    <option value="华北">华北</option>
+    <option value="华南">华南</option>
+    <option value="华中">华中</option>
+    <option value="总部">总部</option>
+   </select>
+  </div>
+  <div class="filter-group">
+   <label>CS姓名</label>
+   <select id="csFilter" onchange="filterCards()">
+    <option value="">全部CS</option>
+    <option value="张继霖">张继霖</option>
+    <option value="刘磊">刘磊</option>
+    <option value="卫中杰">卫中杰</option>
+    <option value="孙浩">孙浩</option>
+    <option value="张松">张松</option>
+    <option value="李康">李康</option>
+    <option value="程新佳">程新佳</option>
+    <option value="胡琦博">胡琦博</option>
+    <option value="白陆">白陆</option>
+    <option value="陈凯奇">陈凯奇</option>
+    <option value="高振杰">高振杰</option>
+    <option value="徐杰">徐杰</option>
+    <option value="李凯">李凯</option>
+    <option value="李剑锋">李剑锋</option>
+    <option value="李琦">李琦</option>
+    <option value="王进干">王进干</option>
+    <option value="赵珂">赵珂</option>
+    <option value="郭凯">郭凯</option>
+    <option value="黄铁创">黄铁创</option>
+    <option value="丁美平">丁美平</option>
+    <option value="韦娇月">韦娇月</option>
+    <option value="廖文静">廖文静</option>
+    <option value="何建岳">何建岳</option>
+    <option value="张小丽">张小丽</option>
+    <option value="杨浩">杨浩</option>
+    <option value="熊新月">熊新月</option>
+    <option value="王振兴">王振兴</option>
+    <option value="王跃琦">王跃琦</option>
+    <option value="田炎晖">田炎晖</option>
+    <option value="胡伟">胡伟</option>
+    <option value="袁程">袁程</option>
+    <option value="桑瑶瑶">桑瑶瑶</option>
+    <option value="王芳颖">王芳颖</option>
+    <option value="李娜">李娜</option>
+   </select>
+  </div>
+  <button onclick="expandAll()" style="background:#fff;border:1px solid #ddd;padding:4px 12px;border-radius:5px;font-size:11px;cursor:pointer;margin-right:6px;">全部展开</button>
+<button onclick="collapseAll()" style="background:#fff;border:1px solid #ddd;padding:4px 12px;border-radius:5px;font-size:11px;cursor:pointer;">全部收起</button>
+<div class="stats">
+   脚本库：34条　|　显示：<span class="green" id="filteredCount">34</span> 条
+  </div>
+ </div>
+
+ <div class="container">
+  <div class="section-label">V10差异化版 · 34条</div>
+  <div class="card-grid" id="existingCardGrid">
+<div class="card" data-region="华北" data-cs="张继霖">
+    <div class="card-header">
+      <div class="card-title">华北老板 | 联想百应如何帮IT门店突破获客困境</div>
+      <span class="badge badge-north">华北</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>张继霖</strong></span>
+      <span class="city">城市：华北地区</span>
+    </div>
+    <div class="card-desc">适用城市：华北地区 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-张继霖">大家好，我是联想百应的张继霖，主要负责华北地区的业务。<br>华北地区的电脑维修店老板们，你们有没有发现，现在大家修电脑第一个想到的不是线下门店，而是去美团、大众点评上找？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>第一是通过全网营销解决了当下的获客难问题。联想百应进驻美团、高德、抖音等各大流量平台形成战略合作，依托线上流量持续赋能线下门店获客增收；同时联动移动、电信等运营商打造IT+CT服务新模式，将AI-IT服务融合到运营商的专线业务中，解决他们的客户IT服务问题，同时依托服务商为中小企业与政企客户做服务交付。<br><br>这样不仅解决了当下门店营收增长难题，在AI浪潮中联想百应在IT服务行业走在了最前列。依托百应AI主机软硬服一体化战略，我们将赋能联想百应服务中心具备独有的AI交付能力，与服务商共享AI经济的红利。<br><br>我们华北已经有大量门店验证，加入后平均每月新增客户30单以上，获客成本下降40%。<br><br>联想百应全国29个省、200多个城市、1000多家门店，期待你的加入！想了解更多，评论区扣「想了解」，我私信你。<br><br>——张继霖</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-张继霖')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('张继霖')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华北" data-cs="刘磊">
+    <div class="card-header">
+      <div class="card-title">郑州老板 | 联想百应如何帮IT门店解决三大难题</div>
+      <span class="badge badge-north">华北</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>刘磊</strong></span>
+      <span class="city">城市：郑州</span>
+    </div>
+    <div class="card-desc">适用城市：郑州 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-刘磊">大家好，我是联想百应的刘磊，主要负责郑州区域的业务拓展工作。<br>现在郑州的电脑维修市场竞争越来越激烈，单靠老客户已经不够了。<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>全网营销是联想百应的第一套方案——美团、高德、抖音全面布局，帮你把线上流量引入线下门店；同时联动运营商，移动和电信的IT服务需求直接导流给合作门店，服务商获得稳定客源。<br><br>更重要的是，在AI时代，联想百应已经帮门店准备好了AI能力——百应AI主机软硬服一体化，让每个合作门店都能提供AI服务，独有的AI交付能力让服务商共享AI经济的红利。<br><br>郑州已经有门店加入联想百应，平均每月多接40单新客户。<br><br>郑州已经有门店开始行动了，你来不来？想了解的，评论区留言，我私信你。<br><br>——刘磊</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-刘磊')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('刘磊')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华北" data-cs="卫中杰">
+    <div class="card-header">
+      <div class="card-title">太原老板 | 联想百应如何帮IT门店转型升级</div>
+      <span class="badge badge-north">华北</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>卫中杰</strong></span>
+      <span class="city">城市：太原</span>
+    </div>
+    <div class="card-desc">适用城市：太原 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-卫中杰">大家好，我是联想百应的卫中杰，主要负责太原区域的业务拓展工作。<br>太原的同行们，你们有没有发现，客户的信任越来越难建立，而且很多客户比价严重？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>怎么解决获客难？联想百应的答案是全网营销。在美团、抖音、高德等平台同步开店，让周边客户主动找到你；同时和移动、电信合作，IT+CT融合，服务商承接运营商客户需求，营收更稳定。<br><br>不仅解决当下的营收问题，联想百应还帮门店布局AI未来——百应AI主机赋能服务中心，让服务商具备独有的AI交付能力，抢占AI经济的红利。<br><br>太原已经有门店加入联想百应，营收有了明显提升。<br><br>太原的同行已经有人在行动了，你还在犹豫吗？想了解怎么加入，评论区扣「想了解」。<br><br>——卫中杰</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-卫中杰')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('卫中杰')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华北" data-cs="孙浩">
+    <div class="card-header">
+      <div class="card-title">济南老板 | 联想百应如何帮IT门店降本增效</div>
+      <span class="badge badge-north">华北</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>孙浩</strong></span>
+      <span class="city">城市：济南</span>
+    </div>
+    <div class="card-desc">适用城市：济南 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-孙浩">大家好，我是联想百应的孙浩，主要负责济南区域的业务拓展工作。<br>济南的IT店老板们，你们有没有觉得，现在开个店等客户上门越来越难了？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>联想百应的第一个杀手锏，是全网营销。帮你同时在美团、高德、抖音开设线上门店，线上曝光带来持续客源；同时联动运营商，移动和电信的IT服务需求由合作门店承接交付。<br><br>在AI浪潮席卷各行各业的当下，联想百应已经走在前面——百应AI主机软硬服一体化战略，帮门店具备AI服务交付能力，共享AI经济的发展成果。<br><br>济南已经有门店加入联想百应，客户稳定性明显增强。<br><br>这不是广告，这是济南大量门店已经验证过的路。想了解的，私信我。<br><br>——孙浩</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-孙浩')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('孙浩')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华北" data-cs="张松">
+    <div class="card-header">
+      <div class="card-title">北京老板 | 联想百应如何帮IT门店获客增收</div>
+      <span class="badge badge-north">华北</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>张松</strong></span>
+      <span class="city">城市：北京</span>
+    </div>
+    <div class="card-desc">适用城市：北京 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-张松">大家好，我是联想百应的张松，主要负责北京市场的拓展工作。<br>北京的同行们，你们有没有发现，现在修电脑的客户越来越年轻化，他们习惯先上网查口碑、看评价？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>获客难怎么破？联想百应用全网营销来解决。在美团、高德、抖音等主流流量平台全面布局，帮门店把线上流量做起来；同时联动移动、电信等运营商，打造IT+CT一体化服务，让运营商的客户需求成为门店的稳定客源。<br><br>不仅营收增长有保障，联想百应更在AI时代帮门店建立差异化竞争力——百应AI主机让服务中心具备独有的AI交付能力，服务商共享AI经济红利。<br><br>北京已经有大量门店加入联想百应，平均获客成本下降40%。<br><br>北京已经有大量门店加入，评论区扣「想了解」，我帮你对接。<br><br>——张松</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-张松')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('张松')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华北" data-cs="李康">
+    <div class="card-header">
+      <div class="card-title">西安老板 | 联想百应如何帮IT门店突破瓶颈</div>
+      <span class="badge badge-north">华北</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>李康</strong></span>
+      <span class="city">城市：西安</span>
+    </div>
+    <div class="card-desc">适用城市：西安 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-李康">大家好，我是联想百应的李康，主要负责西安区域的业务拓展工作。<br>西安的IT店老板们，你们有没有觉得，传统的等客上门模式越来越难？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>全网营销，联想百应帮你打通线上获客渠道。美团、抖音、高德同时入驻，门店在每个大平台都有展示；同步联动运营商，移动和电信的IT服务需求直接派单给附近合作门店。<br><br>联想百应不只解决现在，更着眼AI未来——百应AI主机软硬服一体化战略，让合作门店拥有AI交付能力，在AI时代抢占先机，共享AI经济红利。<br><br>西安已经有门店加入联想百应，平均每月多接40单新客户。<br><br>与其等着被市场淘汰，不如主动出击。想了解怎么加入，评论区扣「想了解」。<br><br>——李康</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-李康')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('李康')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华北" data-cs="程新佳">
+    <div class="card-header">
+      <div class="card-title">沈阳老板 | 联想百应如何帮IT门店提升竞争力</div>
+      <span class="badge badge-north">华北</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>程新佳</strong></span>
+      <span class="city">城市：沈阳</span>
+    </div>
+    <div class="card-desc">适用城市：沈阳 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-程新佳">大家好，我是联想百应的程新佳，主要负责沈阳区域的业务拓展工作。<br>沈阳的同行们，你们有没有发现，现在修电脑的客户越来越依赖线上平台？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>第一步全网营销——联想百应帮你同时在美团、抖音、高德获客，让门店线上曝光量翻倍增长；同时联动运营商做IT+CT融合，服务商的客户来源更稳定。<br><br>更重要的是，联想百应已经在AI领域布局——百应AI主机是软硬服一体化的核心，帮门店具备独有的AI交付能力，服务商共享AI经济的红利。<br><br>沈阳已经有门店加入联想百应，营收提升了20%以上。<br><br>沈阳已经有门店加入联想百应，营收提升了20%以上。评论区留言，我们聊聊。<br><br>——程新佳</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-程新佳')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('程新佳')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华北" data-cs="胡琦博">
+    <div class="card-header">
+      <div class="card-title">天津老板 | 联想百应如何帮IT门店解决获客难题</div>
+      <span class="badge badge-north">华北</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>胡琦博</strong></span>
+      <span class="city">城市：天津</span>
+    </div>
+    <div class="card-desc">适用城市：天津 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-胡琦博">大家好，我是联想百应的胡琦博，主要负责天津市场的拓展工作。<br>天津的IT店老板们，你们有没有觉得，现在客户越来越难找？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>联想百应的全网营销方案，帮你在美团、高德、抖音各大平台同步获客，线上流量持续导入线下门店；同时打通了运营商渠道，移动和电信的IT需求直接导流给合作服务商。<br><br>AI时代来了，联想百应已经帮门店做好准备——百应AI主机赋能服务中心，软硬服一体化让每个合作门店都能提供AI服务，具备独有的AI交付能力，服务商共享AI经济成果。<br><br>天津已经有门店加入联想百应，供应链成本下降了15%。<br><br>天津IT服务市场正在洗牌，你想做洗牌的还是被洗的？私信我了解详情。<br><br>——胡琦博</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-胡琦博')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('胡琦博')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华北" data-cs="白陆">
+    <div class="card-header">
+      <div class="card-title">吉林老板 | 联想百应如何帮IT门店转型升级</div>
+      <span class="badge badge-north">华北</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>白陆</strong></span>
+      <span class="city">城市：吉林</span>
+    </div>
+    <div class="card-desc">适用城市：吉林 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-白陆">大家好，我是联想百应的白陆，主要负责吉林区域的业务拓展工作。<br>吉林的同行们，你们有没有发现，现在修电脑的客户越来越依赖线上评价？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>全网营销布局，是联想百应对策的第一步。帮门店在美团、抖音、高德全面上线；同时联动运营商，移动和电信的用户IT需求由服务商来满足，形成稳定的客源渠道。<br><br>联想百应的布局不只眼前——AI时代，门店必须要有AI服务能力。百应AI主机软硬服一体化，帮门店具备独有的AI交付能力，共享AI经济红利。<br><br>吉林已经有门店加入联想百应，客户来源明显多元化。<br><br>吉林IT服务的老板们，与其一个人硬扛，不如借力。想了解的，私信我。<br><br>——白陆</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-白陆')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('白陆')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华北" data-cs="陈凯奇">
+    <div class="card-header">
+      <div class="card-title">鲁东老板 | 联想百应如何帮IT门店突破困境</div>
+      <span class="badge badge-north">华北</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>陈凯奇</strong></span>
+      <span class="city">城市：鲁东</span>
+    </div>
+    <div class="card-desc">适用城市：鲁东 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-陈凯奇">大家好，我是联想百应的陈凯奇，主要负责鲁东区域的业务拓展工作。<br>鲁东的IT店老板们，你们有没有觉得，现在开个店等客户上门越来越难了？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>全网获客，联想百应从美团、抖音、高德开始。帮门店在几个最大的流量平台同时布局；同时联动移动、电信运营商，IT+CT融合，运营商的政企客户IT需求由合作门店承接交付。<br><br>不仅解决当下门店的营收增长难题，联想百应更在AI浪潮中帮门店抢占先机——百应AI主机赋能服务中心，让服务商拥有AI交付能力，共享AI经济红利。<br><br>鲁东已经有门店加入联想百应，平均每月新增客户30单以上。<br><br>想改变现状的老板，现在就是最好的时机。评论区扣「想了解」，我私信你。<br><br>——陈凯奇</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-陈凯奇')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('陈凯奇')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华南" data-cs="高振杰">
+    <div class="card-header">
+      <div class="card-title">华南老板 | 联想百应如何帮IT门店获客增长</div>
+      <span class="badge badge-south">华南</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>高振杰</strong></span>
+      <span class="city">城市：华南地区</span>
+    </div>
+    <div class="card-desc">适用城市：华南地区 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-高振杰">大家好，我是联想百应的高振杰，主要负责华南区域的业务拓展工作。<br>华南的同行们，你们有没有发现，现在修电脑的客户越来越依赖线上平台？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>联想百应的全网营销方案，帮你在美团、抖音、高德这些大平台同时开店，线上获客全搞定；同时联动运营商，移动和电信的IT服务需求直接派给附近的服务商门店。<br><br>在AI浪潮席卷的当下，联想百应已经走在IT服务行业最前列——百应AI主机软硬服一体化，帮门店建立独有的AI交付能力，服务商共享AI经济红利。<br><br>华南区已经有大量门店验证，平均获客成本下降40%，营收增长25%以上。<br><br>华南区已经有大量门店验证，成功经验可以复制！想了解怎么加入，评论区扣「想了解」，我私信你。<br><br>——高振杰</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-高振杰')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('高振杰')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华南" data-cs="徐杰">
+    <div class="card-header">
+      <div class="card-title">长沙老板 | 联想百应如何帮IT门店突破增长瓶颈</div>
+      <span class="badge badge-south">华南</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>徐杰</strong></span>
+      <span class="city">城市：长沙</span>
+    </div>
+    <div class="card-desc">适用城市：长沙 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-徐杰">大家好，我是联想百应的徐杰，主要负责长沙区域的业务拓展工作。<br>长沙的IT店老板们，你们有没有觉得，现在传统的等客上门模式越来越难？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>全网营销解决获客难题——联想百应帮你同时在美团、抖音、高德开设线上门店，线上曝光带动线下客流；同时打通了运营商渠道，移动和电信的IT服务由合作门店交付。<br><br>联想百应不只帮你解决现在的营收问题，更帮你在AI时代建立优势——百应AI主机软硬服一体化战略，让合作门店具备独有的AI交付能力，共享AI经济红利。<br><br>长沙已经有门店加入联想百应，平均每月多接40单新客户。<br><br>长沙的同行已经先行一步了，你来不来？想了解的，私信我。<br><br>——徐杰</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-徐杰')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('徐杰')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华南" data-cs="李凯">
+    <div class="card-header">
+      <div class="card-title">深圳老板 | 联想百应如何帮IT门店获客增收</div>
+      <span class="badge badge-south">华南</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>李凯</strong></span>
+      <span class="city">城市：深圳</span>
+    </div>
+    <div class="card-desc">适用城市：深圳 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-李凯">大家好，我是联想百应的李凯，主要负责深圳区域的业务拓展工作。<br>深圳的同行们，你们有没有发现，现在修电脑的客户越来越依赖线上评价？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>全网布局，联想百应从流量平台开始。帮门店在美团、抖音、高德同步上线；同时联动运营商，移动和电信的IT需求由服务商来满足，形成稳定的业务来源。<br><br>更重要的是，联想百应在AI领域已有成熟布局——百应AI主机软硬服一体化，帮门店具备独有的AI交付能力，在AI经济中分得一杯羹。<br><br>深圳已经有大量门店加入联想百应，平均营收增长25%以上。<br><br>深圳IT服务的老板们，这次机会你要不要了解一下？评论区留言。<br><br>——李凯</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-李凯')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('李凯')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华南" data-cs="李剑锋">
+    <div class="card-header">
+      <div class="card-title">深圳老板 | 联想百应如何帮IT门店获客增收</div>
+      <span class="badge badge-south">华南</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>李剑锋</strong></span>
+      <span class="city">城市：深圳</span>
+    </div>
+    <div class="card-desc">适用城市：深圳 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-李剑锋">大家好，我是联想百应的李剑锋，主要负责深圳区域的业务拓展工作。<br>深圳的IT店老板们，你们有没有觉得，现在开个店等客户上门越来越难了？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>联想百应的全网营销，帮门店在美团、高德、抖音同时获客，线上流量直接导入线下；同时和运营商合作，移动、电信的IT服务需求由合作服务商承接交付。<br><br>AI时代，门店不能只做传统IT服务——联想百应通过百应AI主机软硬服一体化，帮门店建立AI交付能力，服务商共享AI经济的红利。<br><br>深圳已经有大量门店加入联想百应，平均营收增长25%以上。<br><br>深圳IT服务的老板们，这次机会你要不要了解一下？评论区留言。<br><br>——李剑锋</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-李剑锋')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('李剑锋')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华南" data-cs="李琦">
+    <div class="card-header">
+      <div class="card-title">南宁老板 | 联想百应如何帮IT门店转型升级</div>
+      <span class="badge badge-south">华南</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>李琦</strong></span>
+      <span class="city">城市：南宁</span>
+    </div>
+    <div class="card-desc">适用城市：南宁 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-李琦">大家好，我是联想百应的李琦，主要负责南宁区域的业务拓展工作。<br>南宁的同行们，你们有没有发现，现在修电脑的客户越来越依赖线上平台？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>全网营销第一步——帮你门店在美团、抖音、高德全面上线；同时联动移动、电信等运营商，IT+CT融合，运营商的IT服务需求直接派给合作服务商。<br><br>联想百应已经为AI时代做好准备——百应AI主机赋能服务中心，软硬服一体化让合作门店拥有AI服务交付能力，共享AI经济发展的红利。<br><br>南宁已经有门店加入联想百应，客户稳定性明显增强。<br><br>南宁IT服务市场正在分化，你想做哪一边？私信我，我们聊聊。<br><br>——李琦</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-李琦')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('李琦')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华南" data-cs="王进干">
+    <div class="card-header">
+      <div class="card-title">广州老板 | 联想百应如何帮IT门店降本增效</div>
+      <span class="badge badge-south">华南</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>王进干</strong></span>
+      <span class="city">城市：广州</span>
+    </div>
+    <div class="card-desc">适用城市：广州 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-王进干">大家好，我是联想百应的王进干，主要负责广州区域的业务拓展工作。<br>广州的IT店老板们，你们有没有觉得，现在传统的等客上门模式越来越难？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>联想百应对接了美团、抖音、高德等主流流量平台，帮你门店在每个平台都有曝光；同时联动运营商，移动和电信的IT服务需求由合作门店完成交付。<br><br>在AI浪潮中，联想百应已经走在最前面——百应AI主机软硬服一体化战略，帮门店建立独有的AI交付能力，服务商在AI时代抢占先机，共享AI经济红利。<br><br>广州已经有大量门店加入联想百应，平均获客成本下降明显。<br><br>广州已经有大量同行开始行动了，你呢？评论区扣「想了解」，我私信你。<br><br>——王进干</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-王进干')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('王进干')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华南" data-cs="赵珂">
+    <div class="card-header">
+      <div class="card-title">贵阳老板 | 联想百应如何帮IT门店突破获客瓶颈</div>
+      <span class="badge badge-south">华南</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>赵珂</strong></span>
+      <span class="city">城市：贵阳</span>
+    </div>
+    <div class="card-desc">适用城市：贵阳 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-赵珂">大家好，我是联想百应的赵珂，主要负责贵阳区域的业务拓展工作。<br>贵阳的同行们，你们有没有发现，现在修电脑的客户越来越依赖线上评价？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>全网营销赋能门店——在美团、高德、抖音全面布局，让线上流量持续涌入线下门店；同时联动运营商，移动和电信的IT需求由服务商承接，客源有保障。<br><br>不仅解决营收增长，联想百应更帮门店在AI时代建立护城河——百应AI主机软硬服一体化，让合作服务中心具备独有的AI交付能力，共享AI经济红利。<br><br>贵阳已经有门店加入联想百应，平均每月新增客户30单以上。<br><br>贵州的老板们，这次机会你要不要了解一下？评论区留言。<br><br>——赵珂</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-赵珂')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('赵珂')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华南" data-cs="郭凯">
+    <div class="card-header">
+      <div class="card-title">福州老板 | 联想百应如何帮IT门店提升竞争力</div>
+      <span class="badge badge-south">华南</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>郭凯</strong></span>
+      <span class="city">城市：福州</span>
+    </div>
+    <div class="card-desc">适用城市：福州 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-郭凯">大家好，我是联想百应的郭凯，主要负责福州区域的业务拓展工作。<br>福州的IT店老板们，你们有没有觉得，现在开个店等客户上门越来越难了？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>全网获客，联想百应帮你搞定。在美团、抖音、高德同步开店，门店线上曝光量倍增；同时联动运营商，移动和电信的IT服务需求直接导流给合作服务商。<br><br>联想百应的AI战略已落地——百应AI主机软硬服一体化，帮每个合作门店具备AI交付能力，在AI经济中占据有利位置，共享时代红利。<br><br>福州已经有门店加入联想百应，营收有了明显提升。<br><br>福州IT服务的老板们，与其等着被淘汰，不如主动出击。私信我了解详情。<br><br>——郭凯</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-郭凯')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('郭凯')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华南" data-cs="黄铁创">
+    <div class="card-header">
+      <div class="card-title">广州老板 | 联想百应如何帮IT门店降本增效</div>
+      <span class="badge badge-south">华南</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>黄铁创</strong></span>
+      <span class="city">城市：广州</span>
+    </div>
+    <div class="card-desc">适用城市：广州 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-黄铁创">大家好，我是联想百应的黄铁创，主要负责广州区域的业务拓展工作。<br>广州的同行们，你们有没有发现，现在修电脑的客户越来越依赖线上平台？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>联想百应的全网营销方案，帮你在美团、抖音、高德同时获客，线上曝光带动线下成交；同时打通了运营商渠道，移动和电信的IT服务由合作门店完成。<br><br>AI时代已经来了，联想百应帮你一起迎接——百应AI主机赋能服务中心，软硬服一体化让门店具备AI交付能力，服务商共享AI经济发展成果。<br><br>广州已经有大量门店加入联想百应，平均获客成本下降明显。<br><br>广州已经有大量同行开始行动了，你呢？评论区扣「想了解」，我私信你。<br><br>——黄铁创</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-黄铁创')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('黄铁创')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华南" data-cs="丁美平">
+    <div class="card-header">
+      <div class="card-title">安徽老板 | 联想百应如何帮IT门店获客增长</div>
+      <span class="badge badge-south">华南</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>丁美平</strong></span>
+      <span class="city">城市：安徽</span>
+    </div>
+    <div class="card-desc">适用城市：安徽 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-丁美平">大家好，我是联想百应的丁美平，主要负责安徽区域的业务拓展工作。<br>安徽的IT店老板们，你们有没有觉得，现在传统的等客上门模式越来越难？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>全网营销第一步——帮你门店在美团、高德、抖音全面上线，线上曝光带动客流增长；同时联动移动、电信等运营商，IT+CT融合，运营商客户由合作门店服务。<br><br>联想百应不只帮你解决今天的营收问题，更帮你布局明天的AI能力——百应AI主机软硬服一体化战略，让合作门店具备独有的AI交付能力，共享AI经济红利。<br><br>安徽已经有门店加入联想百应，平均每月多接40单新客户。<br><br>安徽的同行们，有人已经在做了，你来不来？评论区扣「想了解」。<br><br>——丁美平</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-丁美平')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('丁美平')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华南" data-cs="韦娇月">
+    <div class="card-header">
+      <div class="card-title">安徽老板 | 联想百应如何帮IT门店获客增长</div>
+      <span class="badge badge-south">华南</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>韦娇月</strong></span>
+      <span class="city">城市：安徽</span>
+    </div>
+    <div class="card-desc">适用城市：安徽 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-韦娇月">大家好，我是联想百应的韦娇月，主要负责安徽区域的业务拓展工作。<br>安徽的同行们，你们有没有发现，现在修电脑的客户越来越依赖线上平台？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>全网获客是联想百应的核心能力——帮门店在美团、抖音、高德同步布局；同时联动移动、电信等运营商，IT+CT融合，服务商的客户来源更稳定。<br><br>更重要的是，在AI浪潮席卷的当下，联想百应已经在IT服务行业抢占了AI先机——百应AI主机软硬服一体化，帮门店建立AI交付能力，服务商共享AI经济红利。<br><br>安徽已经有门店加入联想百应，平均每月多接40单新客户。<br><br>安徽的同行们，有人已经在做了，你来不来？评论区扣「想了解」。<br><br>——韦娇月</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-韦娇月')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('韦娇月')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华中" data-cs="廖文静">
+    <div class="card-header">
+      <div class="card-title">华中老板 | 联想百应如何帮IT门店获客增收</div>
+      <span class="badge badge-central">华中</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>廖文静</strong></span>
+      <span class="city">城市：华中地区</span>
+    </div>
+    <div class="card-desc">适用城市：华中地区 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-廖文静">大家好，我是联想百应的廖文静，主要负责华中区域的业务拓展工作。<br>华中地区的IT店老板们，你们有没有发现，现在修电脑的客户越来越依赖线上平台？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>联想百应用全网营销解决获客问题——帮你同时在美团、抖音、高德开设线上门店，线上流量持续导入线下；同时联动运营商，移动和电信的IT需求派给合作服务商。<br><br>联想百应的AI主机方案，让每个合作服务中心都具备AI交付能力——软硬服一体化战略，帮门店从传统IT服务升级到AI服务，共享AI经济的红利。<br><br>华中区已经有大量门店验证，平均获客成本下降40%，营收增长25%以上。<br><br>华中区已经有大量门店验证，成功经验可以复制！想了解怎么加入，评论区扣「想了解」。<br><br>——廖文静</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-廖文静')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('廖文静')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华中" data-cs="何建岳">
+    <div class="card-header">
+      <div class="card-title">西北老板 | 联想百应如何帮IT门店转型升级</div>
+      <span class="badge badge-central">华中</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>何建岳</strong></span>
+      <span class="city">城市：西北</span>
+    </div>
+    <div class="card-desc">适用城市：西北 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-何建岳">大家好，我是联想百应的何建岳，主要负责西北区域的业务拓展工作。<br>西北的同行们，你们有没有觉得，现在开个店等客户上门越来越难了？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>全网营销是联想百应的杀手锏——美团、高德、抖音全面布局，门店线上曝光量翻倍；同时联动运营商，移动和电信的IT服务需求由合作门店承接。<br><br>不仅解决了营收增长难题，联想百应更帮门店在AI时代建立竞争优势——百应AI主机软硬服一体化战略，让合作门店具备独有的AI交付能力，共享AI经济红利。<br><br>西北已经有门店加入联想百应，客户来源明显多元化。<br><br>西北IT服务的老板们，这次机会你要不要了解一下？评论区留言。<br><br>——何建岳</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-何建岳')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('何建岳')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华中" data-cs="张小丽">
+    <div class="card-header">
+      <div class="card-title">成都老板 | 联想百应如何帮IT门店降本增效</div>
+      <span class="badge badge-central">华中</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>张小丽</strong></span>
+      <span class="city">城市：成都</span>
+    </div>
+    <div class="card-desc">适用城市：成都 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-张小丽">大家好，我是联想百应的张小丽，主要负责成都区域的业务拓展工作。<br>成都的IT店老板们，你们有没有发现，现在修电脑的客户越来越依赖线上平台？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>全网布局，联想百应从美团、抖音、高德开始，帮你门店在每个大平台都建立获客渠道；同时打通了运营商，移动和电信的IT服务由合作服务商完成交付。<br><br>在AI经济时代，联想百应已经走在了最前面——百应AI主机软硬服一体化，帮门店建立AI交付能力，服务商共享AI时代的发展红利。<br><br>成都已经有大量门店加入联想百应，平均营收增长25%以上。<br><br>成都的同行们，有人已经在做了，你来不来？私信我，发你完整资料。<br><br>——张小丽</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-张小丽')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('张小丽')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华中" data-cs="杨浩">
+    <div class="card-header">
+      <div class="card-title">成都老板 | 联想百应如何帮IT门店降本增效</div>
+      <span class="badge badge-central">华中</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>杨浩</strong></span>
+      <span class="city">城市：成都</span>
+    </div>
+    <div class="card-desc">适用城市：成都 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-杨浩">大家好，我是联想百应的杨浩，主要负责成都区域的业务拓展工作。<br>成都的同行们，你们有没有发现，现在修电脑的客户越来越依赖线上评价？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>联想百应的全网营销，帮你在美团、抖音、高德同时获客，线上流量持续导入线下门店；同时联动运营商，移动和电信的IT需求由服务商承接，营收更稳定。<br><br>联想百应不只帮你解决眼前的营收问题，更帮你在AI时代抢占先机——百应AI主机赋能服务中心，软硬服一体化让合作门店具备独有的AI交付能力，共享AI经济红利。<br><br>成都已经有大量门店加入联想百应，平均营收增长25%以上。<br><br>成都的同行们，有人已经在做了，你来不来？私信我，发你完整资料。<br><br>——杨浩</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-杨浩')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('杨浩')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华中" data-cs="熊新月">
+    <div class="card-header">
+      <div class="card-title">宁波老板 | 联想百应如何帮IT门店突破困境</div>
+      <span class="badge badge-central">华中</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>熊新月</strong></span>
+      <span class="city">城市：宁波</span>
+    </div>
+    <div class="card-desc">适用城市：宁波 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-熊新月">大家好，我是联想百应的熊新月，主要负责宁波区域的业务拓展工作。<br>宁波的IT店老板们，你们有没有觉得，现在传统的等客上门模式越来越难？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>全网营销第一步——帮你门店在美团、高德、抖音全面上线，线上曝光带动客流增长；同时联动移动、电信等运营商，IT+CT融合，运营商客户由合作门店服务。<br><br>更重要的是，AI时代已经到来，联想百应帮门店做好了准备——百应AI主机软硬服一体化，帮合作门店建立AI交付能力，服务商共享AI经济发展成果。<br><br>宁波已经有门店加入联想百应，平均获客成本下降了40%。<br><br>宁波IT服务的老板们，想转型升级的，现在就是最好的时候。评论区扣「想了解」。<br><br>——熊新月</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-熊新月')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('熊新月')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华中" data-cs="王振兴">
+    <div class="card-header">
+      <div class="card-title">杭州老板 | 联想百应如何帮IT门店获客增长</div>
+      <span class="badge badge-central">华中</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>王振兴</strong></span>
+      <span class="city">城市：杭州</span>
+    </div>
+    <div class="card-desc">适用城市：杭州 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-王振兴">大家好，我是联想百应的王振兴，主要负责杭州区域的业务拓展工作。<br>杭州的同行们，你们有没有发现，现在修电脑的客户越来越依赖线上平台？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>全网获客，联想百应帮你实现。美团、抖音、高德同步布局，门店线上曝光量倍增；同时联动运营商，移动和电信的IT服务需求由合作服务商完成交付。<br><br>联想百应的AI布局已经落地——百应AI主机软硬服一体化，让每个合作服务中心都具备AI交付能力，共享AI经济的红利。<br><br>杭州已经有大量门店加入联想百应，平均营收增长25%以上。<br><br>杭州的老板们，与其一个人硬扛，不如看看别人是怎么做的。私信我了解详情。<br><br>——王振兴</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-王振兴')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('王振兴')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华中" data-cs="王跃琦">
+    <div class="card-header">
+      <div class="card-title">重庆老板 | 联想百应如何帮IT门店突破增长瓶颈</div>
+      <span class="badge badge-central">华中</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>王跃琦</strong></span>
+      <span class="city">城市：重庆</span>
+    </div>
+    <div class="card-desc">适用城市：重庆 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-王跃琦">大家好，我是联想百应的王跃琦，主要负责重庆区域的业务拓展工作。<br>重庆的IT店老板们，你们有没有觉得，现在开个店等客户上门越来越难了？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>联想百应的全网营销方案，帮你在美团、抖音、高德各大平台同时获客，线上线下联动；同时打通了运营商渠道，移动和电信的IT服务由合作门店完成交付。<br><br>AI浪潮来袭，联想百应已经走在了前面——百应AI主机赋能服务中心，软硬服一体化让合作门店具备AI交付能力，服务商共享AI经济红利。<br><br>重庆已经有门店加入联想百应，平均每月多接40单新客户。<br><br>重庆IT服务的老板们，这次机会你要不要了解一下？评论区留言。<br><br>——王跃琦</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-王跃琦')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('王跃琦')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华中" data-cs="田炎晖">
+    <div class="card-header">
+      <div class="card-title">武汉老板 | 联想百应如何帮IT门店获客增收</div>
+      <span class="badge badge-central">华中</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>田炎晖</strong></span>
+      <span class="city">城市：武汉</span>
+    </div>
+    <div class="card-desc">适用城市：武汉 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-田炎晖">大家好，我是联想百应的田炎晖，主要负责武汉区域的业务拓展工作。<br>武汉的同行们，你们有没有发现，现在修电脑的客户越来越依赖线上平台？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>全网营销赋能线下门店——美团、抖音、高德全面布局，帮你把线上流量引入门店；同时联动运营商，移动和电信的IT需求由附近合作服务商完成。<br><br>联想百应不仅帮你解决营收增长，更帮你在AI时代建立核心优势——百应AI主机软硬服一体化战略，让合作门店具备独有的AI交付能力，共享AI经济红利。<br><br>武汉已经有门店加入联想百应，营收有了明显提升。<br><br>武汉的老板们，有人已经开始行动了，你呢？私信我，我们聊聊。<br><br>——田炎晖</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-田炎晖')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('田炎晖')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华中" data-cs="胡伟">
+    <div class="card-header">
+      <div class="card-title">江苏老板 | 联想百应如何帮IT门店转型升级</div>
+      <span class="badge badge-central">华中</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>胡伟</strong></span>
+      <span class="city">城市：江苏</span>
+    </div>
+    <div class="card-desc">适用城市：江苏 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-胡伟">大家好，我是联想百应的胡伟，主要负责江苏区域的业务拓展工作。<br>江苏的IT店老板们，你们有没有觉得，现在传统的等客上门模式越来越难？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>全网获客是联想百应的第一步——帮门店在美团、抖音、高德同步上线，线上曝光带动客流；同时联动运营商，移动和电信的IT服务需求由合作服务商承接。<br><br>更重要的是，联想百应已经在AI领域抢先布局——百应AI主机软硬服一体化，帮门店建立AI交付能力，服务商在AI时代共享AI经济红利。<br><br>江苏已经有门店加入联想百应，平均获客成本下降40%。<br><br>江苏的同行们，这次机会你要不要了解一下？评论区扣「想了解」。<br><br>——胡伟</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-胡伟')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('胡伟')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华中" data-cs="袁程">
+    <div class="card-header">
+      <div class="card-title">苏州老板 | 联想百应如何帮IT门店提升竞争力</div>
+      <span class="badge badge-central">华中</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>袁程</strong></span>
+      <span class="city">城市：苏州</span>
+    </div>
+    <div class="card-desc">适用城市：苏州 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-袁程">大家好，我是联想百应的袁程，主要负责苏州区域的业务拓展工作。<br>苏州的同行们，你们有没有发现，现在修电脑的客户越来越依赖线上评价？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>联想百应用全网营销帮你打通线上渠道——美团、高德、抖音全面入驻，门店线上曝光量大幅增长；同时联动运营商，移动和电信的IT需求由合作门店完成交付。<br><br>联想百应的AI战略——百应AI主机软硬服一体化，帮合作门店具备独有的AI交付能力，在AI经济中占据先机，服务商共享AI时代的发展红利。<br><br>苏州已经有门店加入联想百应，营收提升了20%以上。<br><br>苏州IT服务的老板们，想改变的，现在就是最好的时候。私信我，发你完整资料。<br><br>——袁程</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-袁程')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('袁程')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="华中" data-cs="桑瑶瑶">
+    <div class="card-header">
+      <div class="card-title">上海老板 | 联想百应如何帮IT门店降本增效</div>
+      <span class="badge badge-central">华中</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>桑瑶瑶</strong></span>
+      <span class="city">城市：上海</span>
+    </div>
+    <div class="card-desc">适用城市：上海 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-桑瑶瑶">大家好，我是联想百应的桑瑶瑶，主要负责上海区域的业务拓展工作。<br>上海的同行们，你们有没有觉得，现在开个店等客户上门越来越难了？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>全网营销，联想百应帮你从线上获客开始。美团、抖音、高德同步布局，门店线上曝光持续引流；同时联动运营商，移动和电信的IT服务由合作服务商完成。<br><br>在AI时代，门店需要AI能力——联想百应通过百应AI主机软硬服一体化，帮门店建立AI交付能力，服务商共享AI经济的发展红利。<br><br>上海已经有大量门店加入联想百应，平均营收增长25%以上。<br><br>上海IT服务的老板们，大城市更需要借力。评论区扣「想了解」，我私信你。<br><br>——桑瑶瑶</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-桑瑶瑶')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('桑瑶瑶')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="总部" data-cs="王芳颖">
+    <div class="card-header">
+      <div class="card-title">成都老板 | 联想百应如何帮IT门店降本增效</div>
+      <span class="badge badge-hq">总部</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>王芳颖</strong></span>
+      <span class="city">城市：成都</span>
+    </div>
+    <div class="card-desc">适用城市：成都 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-王芳颖">大家好，我是联想百应的王芳颖，主要负责成都及周边城市的拓展工作。<br>成都的IT店老板们，你们有没有想过如何利用互联网平台提升业绩？<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>联想百应的全网营销方案，帮你在美团、抖音、高德同时获客，线上流量持续导入线下门店；同时打通了运营商渠道，移动和电信的IT需求由合作服务商承接交付。<br><br>联想百应已经帮门店准备好了AI时代的能力——百应AI主机软硬服一体化，让合作服务中心具备独有的AI交付能力，共享AI经济的发展红利。<br><br>成都已经有大量门店加入联想百应，平均营收增长25%以上。<br><br>成都的同行们，有人已经在做了，你来不来？私信我，发你完整资料。<br><br>——王芳颖</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-王芳颖')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('王芳颖')">一键复制</button>
+    </div>
+  </div>
+<div class="card" data-region="总部" data-cs="李娜">
+    <div class="card-header">
+      <div class="card-title">联想百应全国招募IT服务合作伙伴</div>
+      <span class="badge badge-hq">总部</span>
+    </div>
+    <div class="card-meta">
+      <span>CS：<strong>李娜</strong></span>
+      <span class="city">城市：联想百应</span>
+    </div>
+    <div class="card-desc">适用城市：联想百应 · 录制时长：1-1.5分钟</div>
+    <div class="card-content" id="ex-content-李娜">大家好，我是联想百应的李娜，主要负责服务商合作对接工作。<br>我们在全国范围内招募IT服务合作伙伴，无论你是在北京、上海，还是其他城市，联想百应都能帮你提升业绩。<br><br>联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。<br>但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。<br><br><br>全网营销是联想百应给门店的第一份大礼——美团、高德、抖音全面布局，帮你把线上流量引入门店；同时联动运营商，移动和电信的IT服务由合作服务商完成交付。<br><br>不仅解决营收增长难题，联想百应更在AI时代帮门店建立优势——百应AI主机软硬服一体化战略，让合作门店具备AI交付能力，服务商共享AI经济红利。<br><br>我们已经有大量门店验证，加入之后客户稳定了，营收提升了。<br><br>我不是来吓你们的，我是把看到的真实差距告诉你们。想了解怎么加入，评论区扣「想了解」，我私信你。<br><br>——李娜</div>
+    <div class="card-actions">
+      <span class="expand-btn" onclick="toggleExpand(this,'ex-content-李娜')">展开全文</span>
+      <button class="copy-btn" onclick="copyScript('李娜')">一键复制</button>
+    </div>
+  </div>
+ </div>
+ <div class="no-result" id="noResult">暂无符合条件的脚本</div>
+</div>
+
+<div class="toast" id="toast"></div>
+<footer>CS脚本分发器 V10 · 差异化版 · 2026-09-16</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script>
+var allScripts = {"张继霖": {"title": "华北老板 | 联想百应如何帮IT门店突破获客困境", "content": "大家好，我是联想百应的张继霖，主要负责华北地区的业务。\n华北地区的电脑维修店老板们，你们有没有发现，现在大家修电脑第一个想到的不是线下门店，而是去美团、大众点评上找？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n第一是通过全网营销解决了当下的获客难问题。联想百应进驻美团、高德、抖音等各大流量平台形成战略合作，依托线上流量持续赋能线下门店获客增收；同时联动移动、电信等运营商打造IT+CT服务新模式，将AI-IT服务融合到运营商的专线业务中，解决他们的客户IT服务问题，同时依托服务商为中小企业与政企客户做服务交付。\n\n这样不仅解决了当下门店营收增长难题，在AI浪潮中联想百应在IT服务行业走在了最前列。依托百应AI主机软硬服一体化战略，我们将赋能联想百应服务中心具备独有的AI交付能力，与服务商共享AI经济的红利。\n\n我们华北已经有大量门店验证，加入后平均每月新增客户30单以上，获客成本下降40%。\n\n联想百应全国29个省、200多个城市、1000多家门店，期待你的加入！想了解更多，评论区扣「想了解」，我私信你。\n\n——张继霖", "city": "华北地区", "region": "华北", "desc": "适用城市：华北地区 · 录制时长：1-1.5分钟"}, "刘磊": {"title": "郑州老板 | 联想百应如何帮IT门店解决三大难题", "content": "大家好，我是联想百应的刘磊，主要负责郑州区域的业务拓展工作。\n现在郑州的电脑维修市场竞争越来越激烈，单靠老客户已经不够了。\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n全网营销是联想百应的第一套方案——美团、高德、抖音全面布局，帮你把线上流量引入线下门店；同时联动运营商，移动和电信的IT服务需求直接导流给合作门店，服务商获得稳定客源。\n\n更重要的是，在AI时代，联想百应已经帮门店准备好了AI能力——百应AI主机软硬服一体化，让每个合作门店都能提供AI服务，独有的AI交付能力让服务商共享AI经济的红利。\n\n郑州已经有门店加入联想百应，平均每月多接40单新客户。\n\n郑州已经有门店开始行动了，你来不来？想了解的，评论区留言，我私信你。\n\n——刘磊", "city": "郑州", "region": "华北", "desc": "适用城市：郑州 · 录制时长：1-1.5分钟"}, "卫中杰": {"title": "太原老板 | 联想百应如何帮IT门店转型升级", "content": "大家好，我是联想百应的卫中杰，主要负责太原区域的业务拓展工作。\n太原的同行们，你们有没有发现，客户的信任越来越难建立，而且很多客户比价严重？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n怎么解决获客难？联想百应的答案是全网营销。在美团、抖音、高德等平台同步开店，让周边客户主动找到你；同时和移动、电信合作，IT+CT融合，服务商承接运营商客户需求，营收更稳定。\n\n不仅解决当下的营收问题，联想百应还帮门店布局AI未来——百应AI主机赋能服务中心，让服务商具备独有的AI交付能力，抢占AI经济的红利。\n\n太原已经有门店加入联想百应，营收有了明显提升。\n\n太原的同行已经有人在行动了，你还在犹豫吗？想了解怎么加入，评论区扣「想了解」。\n\n——卫中杰", "city": "太原", "region": "华北", "desc": "适用城市：太原 · 录制时长：1-1.5分钟"}, "孙浩": {"title": "济南老板 | 联想百应如何帮IT门店降本增效", "content": "大家好，我是联想百应的孙浩，主要负责济南区域的业务拓展工作。\n济南的IT店老板们，你们有没有觉得，现在开个店等客户上门越来越难了？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n联想百应的第一个杀手锏，是全网营销。帮你同时在美团、高德、抖音开设线上门店，线上曝光带来持续客源；同时联动运营商，移动和电信的IT服务需求由合作门店承接交付。\n\n在AI浪潮席卷各行各业的当下，联想百应已经走在前面——百应AI主机软硬服一体化战略，帮门店具备AI服务交付能力，共享AI经济的发展成果。\n\n济南已经有门店加入联想百应，客户稳定性明显增强。\n\n这不是广告，这是济南大量门店已经验证过的路。想了解的，私信我。\n\n——孙浩", "city": "济南", "region": "华北", "desc": "适用城市：济南 · 录制时长：1-1.5分钟"}, "张松": {"title": "北京老板 | 联想百应如何帮IT门店获客增收", "content": "大家好，我是联想百应的张松，主要负责北京市场的拓展工作。\n北京的同行们，你们有没有发现，现在修电脑的客户越来越年轻化，他们习惯先上网查口碑、看评价？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n获客难怎么破？联想百应用全网营销来解决。在美团、高德、抖音等主流流量平台全面布局，帮门店把线上流量做起来；同时联动移动、电信等运营商，打造IT+CT一体化服务，让运营商的客户需求成为门店的稳定客源。\n\n不仅营收增长有保障，联想百应更在AI时代帮门店建立差异化竞争力——百应AI主机让服务中心具备独有的AI交付能力，服务商共享AI经济红利。\n\n北京已经有大量门店加入联想百应，平均获客成本下降40%。\n\n北京已经有大量门店加入，评论区扣「想了解」，我帮你对接。\n\n——张松", "city": "北京", "region": "华北", "desc": "适用城市：北京 · 录制时长：1-1.5分钟"}, "李康": {"title": "西安老板 | 联想百应如何帮IT门店突破瓶颈", "content": "大家好，我是联想百应的李康，主要负责西安区域的业务拓展工作。\n西安的IT店老板们，你们有没有觉得，传统的等客上门模式越来越难？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n全网营销，联想百应帮你打通线上获客渠道。美团、抖音、高德同时入驻，门店在每个大平台都有展示；同步联动运营商，移动和电信的IT服务需求直接派单给附近合作门店。\n\n联想百应不只解决现在，更着眼AI未来——百应AI主机软硬服一体化战略，让合作门店拥有AI交付能力，在AI时代抢占先机，共享AI经济红利。\n\n西安已经有门店加入联想百应，平均每月多接40单新客户。\n\n与其等着被市场淘汰，不如主动出击。想了解怎么加入，评论区扣「想了解」。\n\n——李康", "city": "西安", "region": "华北", "desc": "适用城市：西安 · 录制时长：1-1.5分钟"}, "程新佳": {"title": "沈阳老板 | 联想百应如何帮IT门店提升竞争力", "content": "大家好，我是联想百应的程新佳，主要负责沈阳区域的业务拓展工作。\n沈阳的同行们，你们有没有发现，现在修电脑的客户越来越依赖线上平台？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n第一步全网营销——联想百应帮你同时在美团、抖音、高德获客，让门店线上曝光量翻倍增长；同时联动运营商做IT+CT融合，服务商的客户来源更稳定。\n\n更重要的是，联想百应已经在AI领域布局——百应AI主机是软硬服一体化的核心，帮门店具备独有的AI交付能力，服务商共享AI经济的红利。\n\n沈阳已经有门店加入联想百应，营收提升了20%以上。\n\n沈阳已经有门店加入联想百应，营收提升了20%以上。评论区留言，我们聊聊。\n\n——程新佳", "city": "沈阳", "region": "华北", "desc": "适用城市：沈阳 · 录制时长：1-1.5分钟"}, "胡琦博": {"title": "天津老板 | 联想百应如何帮IT门店解决获客难题", "content": "大家好，我是联想百应的胡琦博，主要负责天津市场的拓展工作。\n天津的IT店老板们，你们有没有觉得，现在客户越来越难找？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n联想百应的全网营销方案，帮你在美团、高德、抖音各大平台同步获客，线上流量持续导入线下门店；同时打通了运营商渠道，移动和电信的IT需求直接导流给合作服务商。\n\nAI时代来了，联想百应已经帮门店做好准备——百应AI主机赋能服务中心，软硬服一体化让每个合作门店都能提供AI服务，具备独有的AI交付能力，服务商共享AI经济成果。\n\n天津已经有门店加入联想百应，供应链成本下降了15%。\n\n天津IT服务市场正在洗牌，你想做洗牌的还是被洗的？私信我了解详情。\n\n——胡琦博", "city": "天津", "region": "华北", "desc": "适用城市：天津 · 录制时长：1-1.5分钟"}, "白陆": {"title": "吉林老板 | 联想百应如何帮IT门店转型升级", "content": "大家好，我是联想百应的白陆，主要负责吉林区域的业务拓展工作。\n吉林的同行们，你们有没有发现，现在修电脑的客户越来越依赖线上评价？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n全网营销布局，是联想百应对策的第一步。帮门店在美团、抖音、高德全面上线；同时联动运营商，移动和电信的用户IT需求由服务商来满足，形成稳定的客源渠道。\n\n联想百应的布局不只眼前——AI时代，门店必须要有AI服务能力。百应AI主机软硬服一体化，帮门店具备独有的AI交付能力，共享AI经济红利。\n\n吉林已经有门店加入联想百应，客户来源明显多元化。\n\n吉林IT服务的老板们，与其一个人硬扛，不如借力。想了解的，私信我。\n\n——白陆", "city": "吉林", "region": "华北", "desc": "适用城市：吉林 · 录制时长：1-1.5分钟"}, "陈凯奇": {"title": "鲁东老板 | 联想百应如何帮IT门店突破困境", "content": "大家好，我是联想百应的陈凯奇，主要负责鲁东区域的业务拓展工作。\n鲁东的IT店老板们，你们有没有觉得，现在开个店等客户上门越来越难了？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n全网获客，联想百应从美团、抖音、高德开始。帮门店在几个最大的流量平台同时布局；同时联动移动、电信运营商，IT+CT融合，运营商的政企客户IT需求由合作门店承接交付。\n\n不仅解决当下门店的营收增长难题，联想百应更在AI浪潮中帮门店抢占先机——百应AI主机赋能服务中心，让服务商拥有AI交付能力，共享AI经济红利。\n\n鲁东已经有门店加入联想百应，平均每月新增客户30单以上。\n\n想改变现状的老板，现在就是最好的时机。评论区扣「想了解」，我私信你。\n\n——陈凯奇", "city": "鲁东", "region": "华北", "desc": "适用城市：鲁东 · 录制时长：1-1.5分钟"}, "高振杰": {"title": "华南老板 | 联想百应如何帮IT门店获客增长", "content": "大家好，我是联想百应的高振杰，主要负责华南区域的业务拓展工作。\n华南的同行们，你们有没有发现，现在修电脑的客户越来越依赖线上平台？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n联想百应的全网营销方案，帮你在美团、抖音、高德这些大平台同时开店，线上获客全搞定；同时联动运营商，移动和电信的IT服务需求直接派给附近的服务商门店。\n\n在AI浪潮席卷的当下，联想百应已经走在IT服务行业最前列——百应AI主机软硬服一体化，帮门店建立独有的AI交付能力，服务商共享AI经济红利。\n\n华南区已经有大量门店验证，平均获客成本下降40%，营收增长25%以上。\n\n华南区已经有大量门店验证，成功经验可以复制！想了解怎么加入，评论区扣「想了解」，我私信你。\n\n——高振杰", "city": "华南地区", "region": "华南", "desc": "适用城市：华南地区 · 录制时长：1-1.5分钟"}, "徐杰": {"title": "长沙老板 | 联想百应如何帮IT门店突破增长瓶颈", "content": "大家好，我是联想百应的徐杰，主要负责长沙区域的业务拓展工作。\n长沙的IT店老板们，你们有没有觉得，现在传统的等客上门模式越来越难？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n全网营销解决获客难题——联想百应帮你同时在美团、抖音、高德开设线上门店，线上曝光带动线下客流；同时打通了运营商渠道，移动和电信的IT服务由合作门店交付。\n\n联想百应不只帮你解决现在的营收问题，更帮你在AI时代建立优势——百应AI主机软硬服一体化战略，让合作门店具备独有的AI交付能力，共享AI经济红利。\n\n长沙已经有门店加入联想百应，平均每月多接40单新客户。\n\n长沙的同行已经先行一步了，你来不来？想了解的，私信我。\n\n——徐杰", "city": "长沙", "region": "华南", "desc": "适用城市：长沙 · 录制时长：1-1.5分钟"}, "李凯": {"title": "深圳老板 | 联想百应如何帮IT门店获客增收", "content": "大家好，我是联想百应的李凯，主要负责深圳区域的业务拓展工作。\n深圳的同行们，你们有没有发现，现在修电脑的客户越来越依赖线上评价？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n全网布局，联想百应从流量平台开始。帮门店在美团、抖音、高德同步上线；同时联动运营商，移动和电信的IT需求由服务商来满足，形成稳定的业务来源。\n\n更重要的是，联想百应在AI领域已有成熟布局——百应AI主机软硬服一体化，帮门店具备独有的AI交付能力，在AI经济中分得一杯羹。\n\n深圳已经有大量门店加入联想百应，平均营收增长25%以上。\n\n深圳IT服务的老板们，这次机会你要不要了解一下？评论区留言。\n\n——李凯", "city": "深圳", "region": "华南", "desc": "适用城市：深圳 · 录制时长：1-1.5分钟"}, "李剑锋": {"title": "深圳老板 | 联想百应如何帮IT门店获客增收", "content": "大家好，我是联想百应的李剑锋，主要负责深圳区域的业务拓展工作。\n深圳的IT店老板们，你们有没有觉得，现在开个店等客户上门越来越难了？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n联想百应的全网营销，帮门店在美团、高德、抖音同时获客，线上流量直接导入线下；同时和运营商合作，移动、电信的IT服务需求由合作服务商承接交付。\n\nAI时代，门店不能只做传统IT服务——联想百应通过百应AI主机软硬服一体化，帮门店建立AI交付能力，服务商共享AI经济的红利。\n\n深圳已经有大量门店加入联想百应，平均营收增长25%以上。\n\n深圳IT服务的老板们，这次机会你要不要了解一下？评论区留言。\n\n——李剑锋", "city": "深圳", "region": "华南", "desc": "适用城市：深圳 · 录制时长：1-1.5分钟"}, "李琦": {"title": "南宁老板 | 联想百应如何帮IT门店转型升级", "content": "大家好，我是联想百应的李琦，主要负责南宁区域的业务拓展工作。\n南宁的同行们，你们有没有发现，现在修电脑的客户越来越依赖线上平台？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n全网营销第一步——帮你门店在美团、抖音、高德全面上线；同时联动移动、电信等运营商，IT+CT融合，运营商的IT服务需求直接派给合作服务商。\n\n联想百应已经为AI时代做好准备——百应AI主机赋能服务中心，软硬服一体化让合作门店拥有AI服务交付能力，共享AI经济发展的红利。\n\n南宁已经有门店加入联想百应，客户稳定性明显增强。\n\n南宁IT服务市场正在分化，你想做哪一边？私信我，我们聊聊。\n\n——李琦", "city": "南宁", "region": "华南", "desc": "适用城市：南宁 · 录制时长：1-1.5分钟"}, "王进干": {"title": "广州老板 | 联想百应如何帮IT门店降本增效", "content": "大家好，我是联想百应的王进干，主要负责广州区域的业务拓展工作。\n广州的IT店老板们，你们有没有觉得，现在传统的等客上门模式越来越难？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n联想百应对接了美团、抖音、高德等主流流量平台，帮你门店在每个平台都有曝光；同时联动运营商，移动和电信的IT服务需求由合作门店完成交付。\n\n在AI浪潮中，联想百应已经走在最前面——百应AI主机软硬服一体化战略，帮门店建立独有的AI交付能力，服务商在AI时代抢占先机，共享AI经济红利。\n\n广州已经有大量门店加入联想百应，平均获客成本下降明显。\n\n广州已经有大量同行开始行动了，你呢？评论区扣「想了解」，我私信你。\n\n——王进干", "city": "广州", "region": "华南", "desc": "适用城市：广州 · 录制时长：1-1.5分钟"}, "赵珂": {"title": "贵阳老板 | 联想百应如何帮IT门店突破获客瓶颈", "content": "大家好，我是联想百应的赵珂，主要负责贵阳区域的业务拓展工作。\n贵阳的同行们，你们有没有发现，现在修电脑的客户越来越依赖线上评价？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n全网营销赋能门店——在美团、高德、抖音全面布局，让线上流量持续涌入线下门店；同时联动运营商，移动和电信的IT需求由服务商承接，客源有保障。\n\n不仅解决营收增长，联想百应更帮门店在AI时代建立护城河——百应AI主机软硬服一体化，让合作服务中心具备独有的AI交付能力，共享AI经济红利。\n\n贵阳已经有门店加入联想百应，平均每月新增客户30单以上。\n\n贵州的老板们，这次机会你要不要了解一下？评论区留言。\n\n——赵珂", "city": "贵阳", "region": "华南", "desc": "适用城市：贵阳 · 录制时长：1-1.5分钟"}, "郭凯": {"title": "福州老板 | 联想百应如何帮IT门店提升竞争力", "content": "大家好，我是联想百应的郭凯，主要负责福州区域的业务拓展工作。\n福州的IT店老板们，你们有没有觉得，现在开个店等客户上门越来越难了？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n全网获客，联想百应帮你搞定。在美团、抖音、高德同步开店，门店线上曝光量倍增；同时联动运营商，移动和电信的IT服务需求直接导流给合作服务商。\n\n联想百应的AI战略已落地——百应AI主机软硬服一体化，帮每个合作门店具备AI交付能力，在AI经济中占据有利位置，共享时代红利。\n\n福州已经有门店加入联想百应，营收有了明显提升。\n\n福州IT服务的老板们，与其等着被淘汰，不如主动出击。私信我了解详情。\n\n——郭凯", "city": "福州", "region": "华南", "desc": "适用城市：福州 · 录制时长：1-1.5分钟"}, "黄铁创": {"title": "广州老板 | 联想百应如何帮IT门店降本增效", "content": "大家好，我是联想百应的黄铁创，主要负责广州区域的业务拓展工作。\n广州的同行们，你们有没有发现，现在修电脑的客户越来越依赖线上平台？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n联想百应的全网营销方案，帮你在美团、抖音、高德同时获客，线上曝光带动线下成交；同时打通了运营商渠道，移动和电信的IT服务由合作门店完成。\n\nAI时代已经来了，联想百应帮你一起迎接——百应AI主机赋能服务中心，软硬服一体化让门店具备AI交付能力，服务商共享AI经济发展成果。\n\n广州已经有大量门店加入联想百应，平均获客成本下降明显。\n\n广州已经有大量同行开始行动了，你呢？评论区扣「想了解」，我私信你。\n\n——黄铁创", "city": "广州", "region": "华南", "desc": "适用城市：广州 · 录制时长：1-1.5分钟"}, "丁美平": {"title": "安徽老板 | 联想百应如何帮IT门店获客增长", "content": "大家好，我是联想百应的丁美平，主要负责安徽区域的业务拓展工作。\n安徽的IT店老板们，你们有没有觉得，现在传统的等客上门模式越来越难？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n全网营销第一步——帮你门店在美团、高德、抖音全面上线，线上曝光带动客流增长；同时联动移动、电信等运营商，IT+CT融合，运营商客户由合作门店服务。\n\n联想百应不只帮你解决今天的营收问题，更帮你布局明天的AI能力——百应AI主机软硬服一体化战略，让合作门店具备独有的AI交付能力，共享AI经济红利。\n\n安徽已经有门店加入联想百应，平均每月多接40单新客户。\n\n安徽的同行们，有人已经在做了，你来不来？评论区扣「想了解」。\n\n——丁美平", "city": "安徽", "region": "华南", "desc": "适用城市：安徽 · 录制时长：1-1.5分钟"}, "韦娇月": {"title": "安徽老板 | 联想百应如何帮IT门店获客增长", "content": "大家好，我是联想百应的韦娇月，主要负责安徽区域的业务拓展工作。\n安徽的同行们，你们有没有发现，现在修电脑的客户越来越依赖线上平台？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n全网获客是联想百应的核心能力——帮门店在美团、抖音、高德同步布局；同时联动移动、电信等运营商，IT+CT融合，服务商的客户来源更稳定。\n\n更重要的是，在AI浪潮席卷的当下，联想百应已经在IT服务行业抢占了AI先机——百应AI主机软硬服一体化，帮门店建立AI交付能力，服务商共享AI经济红利。\n\n安徽已经有门店加入联想百应，平均每月多接40单新客户。\n\n安徽的同行们，有人已经在做了，你来不来？评论区扣「想了解」。\n\n——韦娇月", "city": "安徽", "region": "华南", "desc": "适用城市：安徽 · 录制时长：1-1.5分钟"}, "廖文静": {"title": "华中老板 | 联想百应如何帮IT门店获客增收", "content": "大家好，我是联想百应的廖文静，主要负责华中区域的业务拓展工作。\n华中地区的IT店老板们，你们有没有发现，现在修电脑的客户越来越依赖线上平台？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n联想百应用全网营销解决获客问题——帮你同时在美团、抖音、高德开设线上门店，线上流量持续导入线下；同时联动运营商，移动和电信的IT需求派给合作服务商。\n\n联想百应的AI主机方案，让每个合作服务中心都具备AI交付能力——软硬服一体化战略，帮门店从传统IT服务升级到AI服务，共享AI经济的红利。\n\n华中区已经有大量门店验证，平均获客成本下降40%，营收增长25%以上。\n\n华中区已经有大量门店验证，成功经验可以复制！想了解怎么加入，评论区扣「想了解」。\n\n——廖文静", "city": "华中地区", "region": "华中", "desc": "适用城市：华中地区 · 录制时长：1-1.5分钟"}, "何建岳": {"title": "西北老板 | 联想百应如何帮IT门店转型升级", "content": "大家好，我是联想百应的何建岳，主要负责西北区域的业务拓展工作。\n西北的同行们，你们有没有觉得，现在开个店等客户上门越来越难了？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n全网营销是联想百应的杀手锏——美团、高德、抖音全面布局，门店线上曝光量翻倍；同时联动运营商，移动和电信的IT服务需求由合作门店承接。\n\n不仅解决了营收增长难题，联想百应更帮门店在AI时代建立竞争优势——百应AI主机软硬服一体化战略，让合作门店具备独有的AI交付能力，共享AI经济红利。\n\n西北已经有门店加入联想百应，客户来源明显多元化。\n\n西北IT服务的老板们，这次机会你要不要了解一下？评论区留言。\n\n——何建岳", "city": "西北", "region": "华中", "desc": "适用城市：西北 · 录制时长：1-1.5分钟"}, "张小丽": {"title": "成都老板 | 联想百应如何帮IT门店降本增效", "content": "大家好，我是联想百应的张小丽，主要负责成都区域的业务拓展工作。\n成都的IT店老板们，你们有没有发现，现在修电脑的客户越来越依赖线上平台？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n全网布局，联想百应从美团、抖音、高德开始，帮你门店在每个大平台都建立获客渠道；同时打通了运营商，移动和电信的IT服务由合作服务商完成交付。\n\n在AI经济时代，联想百应已经走在了最前面——百应AI主机软硬服一体化，帮门店建立AI交付能力，服务商共享AI时代的发展红利。\n\n成都已经有大量门店加入联想百应，平均营收增长25%以上。\n\n成都的同行们，有人已经在做了，你来不来？私信我，发你完整资料。\n\n——张小丽", "city": "成都", "region": "华中", "desc": "适用城市：成都 · 录制时长：1-1.5分钟"}, "杨浩": {"title": "成都老板 | 联想百应如何帮IT门店降本增效", "content": "大家好，我是联想百应的杨浩，主要负责成都区域的业务拓展工作。\n成都的同行们，你们有没有发现，现在修电脑的客户越来越依赖线上评价？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n联想百应的全网营销，帮你在美团、抖音、高德同时获客，线上流量持续导入线下门店；同时联动运营商，移动和电信的IT需求由服务商承接，营收更稳定。\n\n联想百应不只帮你解决眼前的营收问题，更帮你在AI时代抢占先机——百应AI主机赋能服务中心，软硬服一体化让合作门店具备独有的AI交付能力，共享AI经济红利。\n\n成都已经有大量门店加入联想百应，平均营收增长25%以上。\n\n成都的同行们，有人已经在做了，你来不来？私信我，发你完整资料。\n\n——杨浩", "city": "成都", "region": "华中", "desc": "适用城市：成都 · 录制时长：1-1.5分钟"}, "熊新月": {"title": "宁波老板 | 联想百应如何帮IT门店突破困境", "content": "大家好，我是联想百应的熊新月，主要负责宁波区域的业务拓展工作。\n宁波的IT店老板们，你们有没有觉得，现在传统的等客上门模式越来越难？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n全网营销第一步——帮你门店在美团、高德、抖音全面上线，线上曝光带动客流增长；同时联动移动、电信等运营商，IT+CT融合，运营商客户由合作门店服务。\n\n更重要的是，AI时代已经到来，联想百应帮门店做好了准备——百应AI主机软硬服一体化，帮合作门店建立AI交付能力，服务商共享AI经济发展成果。\n\n宁波已经有门店加入联想百应，平均获客成本下降了40%。\n\n宁波IT服务的老板们，想转型升级的，现在就是最好的时候。评论区扣「想了解」。\n\n——熊新月", "city": "宁波", "region": "华中", "desc": "适用城市：宁波 · 录制时长：1-1.5分钟"}, "王振兴": {"title": "杭州老板 | 联想百应如何帮IT门店获客增长", "content": "大家好，我是联想百应的王振兴，主要负责杭州区域的业务拓展工作。\n杭州的同行们，你们有没有发现，现在修电脑的客户越来越依赖线上平台？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n全网获客，联想百应帮你实现。美团、抖音、高德同步布局，门店线上曝光量倍增；同时联动运营商，移动和电信的IT服务需求由合作服务商完成交付。\n\n联想百应的AI布局已经落地——百应AI主机软硬服一体化，让每个合作服务中心都具备AI交付能力，共享AI经济的红利。\n\n杭州已经有大量门店加入联想百应，平均营收增长25%以上。\n\n杭州的老板们，与其一个人硬扛，不如看看别人是怎么做的。私信我了解详情。\n\n——王振兴", "city": "杭州", "region": "华中", "desc": "适用城市：杭州 · 录制时长：1-1.5分钟"}, "王跃琦": {"title": "重庆老板 | 联想百应如何帮IT门店突破增长瓶颈", "content": "大家好，我是联想百应的王跃琦，主要负责重庆区域的业务拓展工作。\n重庆的IT店老板们，你们有没有觉得，现在开个店等客户上门越来越难了？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n联想百应的全网营销方案，帮你在美团、抖音、高德各大平台同时获客，线上线下联动；同时打通了运营商渠道，移动和电信的IT服务由合作门店完成交付。\n\nAI浪潮来袭，联想百应已经走在了前面——百应AI主机赋能服务中心，软硬服一体化让合作门店具备AI交付能力，服务商共享AI经济红利。\n\n重庆已经有门店加入联想百应，平均每月多接40单新客户。\n\n重庆IT服务的老板们，这次机会你要不要了解一下？评论区留言。\n\n——王跃琦", "city": "重庆", "region": "华中", "desc": "适用城市：重庆 · 录制时长：1-1.5分钟"}, "田炎晖": {"title": "武汉老板 | 联想百应如何帮IT门店获客增收", "content": "大家好，我是联想百应的田炎晖，主要负责武汉区域的业务拓展工作。\n武汉的同行们，你们有没有发现，现在修电脑的客户越来越依赖线上平台？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n全网营销赋能线下门店——美团、抖音、高德全面布局，帮你把线上流量引入门店；同时联动运营商，移动和电信的IT需求由附近合作服务商完成。\n\n联想百应不仅帮你解决营收增长，更帮你在AI时代建立核心优势——百应AI主机软硬服一体化战略，让合作门店具备独有的AI交付能力，共享AI经济红利。\n\n武汉已经有门店加入联想百应，营收有了明显提升。\n\n武汉的老板们，有人已经开始行动了，你呢？私信我，我们聊聊。\n\n——田炎晖", "city": "武汉", "region": "华中", "desc": "适用城市：武汉 · 录制时长：1-1.5分钟"}, "胡伟": {"title": "江苏老板 | 联想百应如何帮IT门店转型升级", "content": "大家好，我是联想百应的胡伟，主要负责江苏区域的业务拓展工作。\n江苏的IT店老板们，你们有没有觉得，现在传统的等客上门模式越来越难？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n全网获客是联想百应的第一步——帮门店在美团、抖音、高德同步上线，线上曝光带动客流；同时联动运营商，移动和电信的IT服务需求由合作服务商承接。\n\n更重要的是，联想百应已经在AI领域抢先布局——百应AI主机软硬服一体化，帮门店建立AI交付能力，服务商在AI时代共享AI经济红利。\n\n江苏已经有门店加入联想百应，平均获客成本下降40%。\n\n江苏的同行们，这次机会你要不要了解一下？评论区扣「想了解」。\n\n——胡伟", "city": "江苏", "region": "华中", "desc": "适用城市：江苏 · 录制时长：1-1.5分钟"}, "袁程": {"title": "苏州老板 | 联想百应如何帮IT门店提升竞争力", "content": "大家好，我是联想百应的袁程，主要负责苏州区域的业务拓展工作。\n苏州的同行们，你们有没有发现，现在修电脑的客户越来越依赖线上评价？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n联想百应用全网营销帮你打通线上渠道——美团、高德、抖音全面入驻，门店线上曝光量大幅增长；同时联动运营商，移动和电信的IT需求由合作门店完成交付。\n\n联想百应的AI战略——百应AI主机软硬服一体化，帮合作门店具备独有的AI交付能力，在AI经济中占据先机，服务商共享AI时代的发展红利。\n\n苏州已经有门店加入联想百应，营收提升了20%以上。\n\n苏州IT服务的老板们，想改变的，现在就是最好的时候。私信我，发你完整资料。\n\n——袁程", "city": "苏州", "region": "华中", "desc": "适用城市：苏州 · 录制时长：1-1.5分钟"}, "桑瑶瑶": {"title": "上海老板 | 联想百应如何帮IT门店降本增效", "content": "大家好，我是联想百应的桑瑶瑶，主要负责上海区域的业务拓展工作。\n上海的同行们，你们有没有觉得，现在开个店等客户上门越来越难了？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n全网营销，联想百应帮你从线上获客开始。美团、抖音、高德同步布局，门店线上曝光持续引流；同时联动运营商，移动和电信的IT服务由合作服务商完成。\n\n在AI时代，门店需要AI能力——联想百应通过百应AI主机软硬服一体化，帮门店建立AI交付能力，服务商共享AI经济的发展红利。\n\n上海已经有大量门店加入联想百应，平均营收增长25%以上。\n\n上海IT服务的老板们，大城市更需要借力。评论区扣「想了解」，我私信你。\n\n——桑瑶瑶", "city": "上海", "region": "华中", "desc": "适用城市：上海 · 录制时长：1-1.5分钟"}, "王芳颖": {"title": "成都老板 | 联想百应如何帮IT门店降本增效", "content": "大家好，我是联想百应的王芳颖，主要负责成都及周边城市的拓展工作。\n成都的IT店老板们，你们有没有想过如何利用互联网平台提升业绩？\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n联想百应的全网营销方案，帮你在美团、抖音、高德同时获客，线上流量持续导入线下门店；同时打通了运营商渠道，移动和电信的IT需求由合作服务商承接交付。\n\n联想百应已经帮门店准备好了AI时代的能力——百应AI主机软硬服一体化，让合作服务中心具备独有的AI交付能力，共享AI经济的发展红利。\n\n成都已经有大量门店加入联想百应，平均营收增长25%以上。\n\n成都的同行们，有人已经在做了，你来不来？私信我，发你完整资料。\n\n——王芳颖", "city": "成都", "region": "总部", "desc": "适用城市：成都 · 录制时长：1-1.5分钟"}, "李娜": {"title": "联想百应全国招募IT服务合作伙伴", "content": "大家好，我是联想百应的李娜，主要负责服务商合作对接工作。\n我们在全国范围内招募IT服务合作伙伴，无论你是在北京、上海，还是其他城市，联想百应都能帮你提升业绩。\n\n联想百应——全国连锁IT服务品牌，三年时间，全国29个省、200多个城市、1000多家IT服务门店加入。\n但我发现，很多老板仍然面临一个困境——缺品牌、缺客户、缺备件，随机拿货，没有价格及质量保障，导致生意越来越难。\n\n\n全网营销是联想百应给门店的第一份大礼——美团、高德、抖音全面布局，帮你把线上流量引入门店；同时联动运营商，移动和电信的IT服务由合作服务商完成交付。\n\n不仅解决营收增长难题，联想百应更在AI时代帮门店建立优势——百应AI主机软硬服一体化战略，让合作门店具备AI交付能力，服务商共享AI经济红利。\n\n我们已经有大量门店验证，加入之后客户稳定了，营收提升了。\n\n我不是来吓你们的，我是把看到的真实差距告诉你们。想了解怎么加入，评论区扣「想了解」，我私信你。\n\n——李娜", "city": "联想百应", "region": "总部", "desc": "适用城市：联想百应 · 录制时长：1-1.5分钟"}};
+function showToast(msg){
+ var t = document.getElementById('toast');
+ t.textContent = msg; t.classList.add('show');
+ setTimeout(function(){ t.classList.remove('show'); }, 3000);
+}
+
+function toggleExpand(btn, contentId){
+ var content = document.getElementById(contentId);
+ if(!content) return;
+ var isExp = content.classList.toggle('expanded');
+ btn.textContent = isExp ? '收起' : '展开全文';
+}
+
+// 铁律折叠
+
+// 文件选择处理
+function handleFileSelect(input){
+ if(!input.files || !input.files[0]) return;
+ var file = input.files[0];
+ var reader = new FileReader();
+ reader.onload = function(e){
+  var content = e.target.result;
+  if(file.name.endsWith('.json')){
+   try {
+    var json = JSON.parse(content);
+    var text = JSON.stringify(json, null, 2);
+    document.getElementById('textInput').value = text;
+    showUploadResult('JSON 文件已加载，共 ' + (text.length) + ' 字符');
+   } catch(e){ showUploadResult('JSON 解析失败：' + e.message); }
+  } else {
+   document.getElementById('textInput').value = content;
+   showUploadResult('文件已加载：' + file.name + '，' + content.length + ' 字符');
+  }
+ };
+ reader.readAsText(file);
+}
+
+// 处理粘贴的文字
+function processText(){
+ var text = document.getElementById('textInput').value.trim();
+ if(!text){ showUploadResult('请先输入或加载内容'); return; }
+ // 显示提取的内容摘要
+ var preview = text.substring(0, 300).replace(/[\n\r]+/g, ' ');
+ if(text.length > 300) preview += '...';
+ showUploadResult('已解析 ' + text.length + ' 字符：' + preview);
+}
+
+// 显示上传结果
+function showUploadResult(msg){
+ var el = document.getElementById('uploadResult');
+ if(!el) return;
+ el.textContent = msg;
+ el.style.display = 'block';
+ setTimeout(function(){ el.style.display = 'none'; }, 5000);
+}
+
+// 一键复制
+function copyScript(cs){
+ var data = allScripts[cs];
+ if(!data){showToast('⚠️ 未找到脚本数据'); return;}
+ var text = data.title + '\n\n' + data.content;
+ if(navigator.clipboard && navigator.clipboard.writeText){
+  navigator.clipboard.writeText(text).then(function(){notifyCopy(cs);}).catch(function(){fallbackCopy(text, cs);});
+ } else {fallbackCopy(text, cs);}
+}
+function fallbackCopy(text, cs){
+ var ta = document.createElement('textarea'); ta.value = text;
+ ta.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(ta);
+ ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+ notifyCopy(cs);
+}
+function notifyCopy(cs){
+ document.querySelectorAll('.copy-btn').forEach(function(b){
+  var onclick = b.getAttribute('onclick') || '';
+  if(onclick.indexOf(cs) > -1){
+   b.textContent = '已复制 ✓'; b.classList.add('copied');
+   setTimeout(function(){b.textContent = '一键复制'; b.classList.remove('copied');}, 2000);
+  }
+ });
+}
+
+// 生成34条脚本
+
+function filterCards(){
+ var region = document.getElementById('regionFilter').value;
+ var csFilter = document.getElementById('csFilter').value;
+ var allCards = document.querySelectorAll('.card-grid .card');
+ var count = 0;
+ allCards.forEach(function(card){
+  var matchR = !region || card.dataset.region === region;
+  var matchC = !csFilter || card.dataset.cs === csFilter;
+  card.style.display = (matchR && matchC) ? '' : 'none';
+  if(matchR && matchC) count++;
+ });
+ document.getElementById('filteredCount').textContent = count;
+ document.getElementById('noResult').style.display = count === 0 ? 'block' : 'none';
+}
+
+function expandAll(){
+ var allContent = document.querySelectorAll('.card-content');
+ allContent.forEach(function(el){ el.classList.add('expanded'); });
+ var allBtns = document.querySelectorAll('.expand-btn');
+ allBtns.forEach(function(b){ b.textContent = '收起'; });
+}
+
+function collapseAll(){
+ var allContent = document.querySelectorAll('.card-content');
+ allContent.forEach(function(el){ el.classList.remove('expanded'); });
+ var allBtns = document.querySelectorAll('.expand-btn');
+ allBtns.forEach(function(b){ b.textContent = '展开全文'; });
+}
+
+
+// 大区联动
+
+</script>
+<!-- Mammoth.js: 解析本地 Word 文档（.docx）-->
+</body>
+</html>

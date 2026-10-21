@@ -1,6 +1,6 @@
-# 🔥 CS热点短视频脚本仓库
+# script · 联想百应 CS 渠道新媒体营销
 
-> 联想百应 · CS渠道新媒体营销 · 每日热点脚本库
+> 每日热点短视频脚本库 · 34位CS城市经理直接可用
 
 ## 📌 这个仓库解决什么问题
 
@@ -16,7 +16,8 @@
 ## 📁 目录结构
 
 ```
-CS脚本仓库/
+script/
+├── CS脚本分发器v10.html      # 旧版分发器（保留）
 ├── daily/                    # 每日脚本归档（按日期命名）
 │   ├── 2026-10-21.md         # Markdown 版
 │   └── 2026-10-21.html       # HTML 版（含复制按钮）
@@ -61,10 +62,13 @@ CS脚本仓库/
 ## 👥 CS使用方式
 
 ```bash
-git clone <repo-url>
-cd CS脚本仓库
+git clone https://github.com/leena-free/script.git
+cd script
+git pull          # 每天更新一次
 # 打开 daily/今天日期.html，直接复制脚本去录视频
 ```
+
+或直接打开 https://github.com/leena-free/script/tree/main/daily
 
 ---
 
