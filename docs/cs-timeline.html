@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CS大会视频《百应相伴，一路同行》节奏时间轴</title>
+<style>
+:root{
+  --bg:#0d1117; --panel:#161b22; --line:#30363d; --txt:#e6edf3; --dim:#8b949e;
+  --red:#d8000f; --gold:#f0a020; --blue:#3d8bfd; --green:#3fb950; --purple:#a371f7;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:"Microsoft YaHei","PingFang SC",-apple-system,sans-serif;padding:28px 22px 60px}
+.wrap{max-width:1280px;margin:0 auto}
+header{margin-bottom:26px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+h1{font-size:26px;letter-spacing:.5px;margin-bottom:8px}
+.sub{color:var(--dim);font-size:14px;line-height:1.9}
+.sub b{color:var(--txt)}
+.badges{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap}
+.badge{background:#21262d;border:1px solid var(--line);border-radius:6px;padding:5px 11px;font-size:13px;color:var(--dim)}
+.badge b{color:var(--gold)}
+.bar-wrap{margin:26px 0 8px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px 18px}
+.bar-title{font-size:14px;color:var(--dim);margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--dim)}
+.legend span{display:flex;align-items:center;gap:5px}
+.dot{width:10px;height:10px;border-radius:2px;display:inline-block}
+.timeline{position:relative;height:78px;background:#0b0f14;border:1px solid var(--line);border-radius:6px;overflow:hidden;cursor:pointer}
+.tl-seg{position:absolute;top:0;bottom:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;border-right:1px solid rgba(0,0,0,.45);overflow:hidden;white-space:nowrap;transition:filter .15s}
+.tl-seg:hover{filter:brightness(1.35)}
+.tl-seg.s{background:#30363d;color:#c9d1d9}
+.tl-seg.csm{background:linear-gradient(180deg,#4a8ef0,#2a6fd0)}
+.tl-seg.cs{background:linear-gradient(180deg,#3fb950,#2a8f3d)}
+.tl-seg.shop{background:linear-gradient(180deg,#f0a020,#d1830f);color:#1a1206}
+.tl-seg.sup{background:linear-gradient(180deg,#a371f7,#7c4fd0)}
+.tl-seg.flash{background:linear-gradient(180deg,#d8000f,#a00009)}
+.tl-seg.end{background:#21262d;border:1px solid var(--red);color:#ff8a8f}
+.ruler{position:relative;height:26px;font-size:11px;color:var(--dim)}
+.ruler i{position:absolute;top:0;border-left:1px solid var(--line);padding-left:4px;font-style:normal;height:26px;line-height:26px}
+.tl-tip{position:fixed;background:#0b0f14;border:1px solid var(--gold);border-radius:6px;padding:8px 11px;font-size:12px;pointer-events:none;display:none;z-index:99;line-height:1.7;box-shadow:0 4px 14px rgba(0,0,0,.6)}
+.tl-tip b{color:var(--gold)}
+h2{font-size:18px;margin:34px 0 14px;padding-left:10px;border-left:3px solid var(--red)}
+table{width:100%;border-collapse:collapse;font-size:13px;background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+th{background:#1c2128;color:var(--dim);font-weight:600;text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap;font-size:12px}
+td{padding:9px 12px;border-bottom:1px solid #21262d}
+tr:hover td{background:#1a1f26}
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;color:#fff}
+.t-csm{background:#2a6fd0}.t-cs{background:#2a8f3d}.t-shop{background:#d1830f}.t-sup{background:#7c4fd0}.t-flash{background:#a00009}.t-end{background:#30363d;border:1px solid var(--red)}
+.tc{font-variant-numeric:tabular-nums;color:var(--dim);white-space:nowrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px 18px}
+.card h3{font-size:14px;color:var(--gold);margin-bottom:10px}
+.bar-mini{height:26px;border-radius:5px;overflow:hidden;display:flex;margin:10px 0 8px;font-size:11px;color:#fff}
+.bar-mini div{display:flex;align-items:center;justify-content:center;border-right:1px solid rgba(0,0,0,.4)}
+.kv{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #262d36;font-size:13px}
+.kv:last-child{border:0}
+.kv span:last-child{color:var(--dim)}
+ol.flashlist{list-style:none;counter-reset:f;columns:2;column-gap:26px;font-size:12.5px}
+ol.flashlist li{counter-increment:f;padding:4px 0;break-inside:avoid;display:flex;gap:8px}
+ol.flashlist li::before{content:counter(f,decimal-leading-zero);color:var(--gold);font-variant-numeric:tabular-nums;flex:0 0 22px}
+ol.flashlist li em{font-style:normal;color:var(--dim);font-size:11.5px;margin-left:auto;white-space:nowrap}
+.note{margin-top:26px;background:#12161d;border-left:3px solid var(--gold);padding:14px 16px;font-size:13px;color:#c9d1d9;line-height:2;border-radius:0 6px 6px 0}
+.note b{color:var(--gold)}
+.pct{font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>CS大会视频《百应相伴，一路同行》· 节奏时间轴</h1>
+  <div class="sub">
+    大会时间 2026-11-19 ｜ 目标交片 11-13 ｜ 规格 <b>1920×1080 / 24fps / 380.000s / 9120 帧</b> ｜ 上台 <b>16 人</b>（3区域×4 + 供应链4）｜ 每人 <b>20.000s</b>
+  </div>
+  <div class="badges">
+    <div class="badge">总时长 <b>6分20.000秒</b></div>
+    <div class="badge">口播 <b>320.000s</b> / 84.2%</div>
+    <div class="badge">快闪 <b>30.000s</b> / 7.9%</div>
+    <div class="badge">定格 <b>12.000s</b> / 3.2%</div>
+    <div class="badge">片头 <b>10.000s</b> / 2.6%</div>
+  </div>
+</header>
+
+<div class="bar-wrap">
+  <div class="bar-title">
+    <span>主时间轴（横向按真实时长比例，悬停查看明细）</span>
+    <span class="legend">
+      <span><i class="dot" style="background:#30363d"></i>片头</span>
+      <span><i class="dot" style="background:#2a6fd0"></i>CSM</span>
+      <span><i class="dot" style="background:#2a8f3d"></i>CS</span>
+      <span><i class="dot" style="background:#d1830f"></i>门店</span>
+      <span><i class="dot" style="background:#7c4fd0"></i>供应商</span>
+      <span><i class="dot" style="background:#a00009"></i>快闪</span>
+      <span><i class="dot" style="background:#30363d;border:1px solid #d8000f"></i>定格</span>
+    </span>
+  </div>
+  <div class="timeline" id="tl"></div>
+  <div class="ruler" id="ruler"></div>
+</div>
+
+<h2>逐镜时间轴（帧精确）</h2>
+<table>
+<thead><tr><th>段落</th><th>人物 / 内容</th><th>身份</th><th>时间码</th><th>帧区间</th><th>时长</th></tr></thead>
+<tbody id="rows"></tbody>
+</table>
+
+<h2>时长构成</h2>
+<div class="grid2">
+  <div class="card">
+    <h3>比例拆解</h3>
+    <div class="bar-mini">
+      <div style="width:2.6%;background:#30363d">2.6</div>
+      <div style="width:84.2%;background:linear-gradient(90deg,#2a6fd0,#2a8f3d,#d1830f,#7c4fd0)">口播 84.2%</div>
+      <div style="width:7.9%;background:#a00009">7.9</div>
+      <div style="width:3.2%;background:#30363d;border:1px solid #d8000f">3.2</div>
+    </div>
+    <div class="kv"><span>片头（品牌包装引入）</span><span>10.000s / 2.6%</span></div>
+    <div class="kv"><span>16 人口播（16×20s，严格等长）</span><span>320.000s / 84.2%</span></div>
+    <div class="kv"><span>CS 快闪（20张×1.5s 硬切）</span><span>30.000s / 7.9%</span></div>
+    <div class="kv"><span>定格收尾（全员定格+标语）</span><span>12.000s / 3.2%</span></div>
+    <div class="kv"><span>篇章字卡（4×2s 叠首镜）</span><span>8.000s / 2.1%</span></div>
+  </div>
+  <div class="card">
+    <h3>篇章节奏（每段 1分20秒 = 4人×20秒）</h3>
+    <div class="kv"><span>片头</span><span>00:00 – 00:10</span></div>
+    <div class="kv"><span>华北篇（4人）</span><span>00:12 – 01:32</span></div>
+    <div class="kv"><span>华南篇（4人）</span><span>01:34 – 02:54</span></div>
+    <div class="kv"><span>华中篇（4人）</span><span>02:56 – 04:16</span></div>
+    <div class="kv"><span>供应链篇（4人）</span><span>04:18 – 05:38</span></div>
+    <div class="kv"><span>CS 快闪</span><span>05:38 – 06:08</span></div>
+    <div class="kv"><span>定格收尾</span><span>06:08 – 06:20</span></div>
+    <div class="kv"><span>尾板定格（全员）</span><span>6 位 CS/CSM 九宫格 + 门店/供应商散点</span></div>
+  </div>
+</div>
+
+<h2>CS 快闪 20 张明细（每张 1.500s / 36 帧，硬切 + 0.5 帧白闪）</h2>
+<ol class="flashlist" id="flash"></ol>
+
+<div class="note">
+  <b>执行铁律：</b>禁止用「按秒裁切」，一律按帧对齐（<b>-frames:v</b> 精确取帧 + <b>tpad</b> 补足），24fps 下按秒裁会累积舍入误差。<br>
+  <b>音频：</b>轻快温暖企业向弦乐铺底，人声段 sidechain duck −12dB，整体 −14.0 LUFS（LRA ≤ 3.0，真峰 ≤ −1.5 dBTP）；快闪段每 1.500s 一次击点；结尾 1.5s 落到主题旋律。<br>
+  <b>素材要求：</b>照片统一 3:4 竖版或 1:1，短边 ≥1200px，主体居中不戴墨镜；每人 1 张正脸半身照 + 1 张工作场景照，命名与片头规范一致。
+</div>
+</div>
+
+<div class="tl-tip" id="tip"></div>
+
+<script>
+const DATA=[
+ {seg:"片头",cls:"s",who:"品牌包装 + 主题引入",role:"—",tc:"00:00.000 – 00:10.000",fr:"0 – 239",dur:10.000,tip:"品牌包装 + 主题「百应相伴，一路同行」引入"},
+ {seg:"华北",cls:"csm",who:"张继霖",role:"CSM",tc:"00:12.000 – 00:32.000",fr:"288 – 767",dur:20},
+ {seg:"华北",cls:"cs",who:"张松",role:"CS",tc:"00:32.000 – 00:52.000",fr:"768 – 1247",dur:20},
+ {seg:"华北",cls:"shop",who:"赵俊壹",role:"门店·沈阳白塔店",tc:"00:52.000 – 01:12.000",fr:"1248 – 1727",dur:20},
+ {seg:"华北",cls:"shop",who:"刘昊",role:"门店·北京四合上院店",tc:"01:12.000 – 01:32.000",fr:"1728 – 2207",dur:20},
+ {seg:"华南",cls:"csm",who:"高振杰",role:"CSM",tc:"01:34.000 – 01:54.000",fr:"2256 – 2735",dur:20},
+ {seg:"华南",cls:"cs",who:"黄铁创",role:"CS",tc:"01:54.000 – 02:14.000",fr:"2736 – 3215",dur:20},
+ {seg:"华南",cls:"shop",who:"郑智敏",role:"门店·深圳永丰综合楼店",tc:"02:14.000 – 02:34.000",fr:"3216 – 3695",dur:20},
+ {seg:"华南",cls:"shop",who:"刘爱春",role:"门店·合肥包河苑店",tc:"02:34.000 – 02:54.000",fr:"3696 – 4175",dur:20},
+ {seg:"华中",cls:"csm",who:"廖文静",role:"CSM",tc:"02:56.000 – 03:16.000",fr:"4224 – 4703",dur:20},
+ {seg:"华中",cls:"cs",who:"张小丽",role:"CS",tc:"03:16.000 – 03:36.000",fr:"4704 – 5183",dur:20},
+ {seg:"华中",cls:"shop",who:"陈建宇",role:"门店·宁波鄞州万达店",tc:"03:36.000 – 03:56.000",fr:"5184 – 5663",dur:20},
+ {seg:"华中",cls:"shop",who:"杨海月",role:"门店·盐城迎宾北路店",tc:"03:56.000 – 04:16.000",fr:"5664 – 6143",dur:20},
+ {seg:"供应链",cls:"sup",who:"供应商1",role:"百应选件",tc:"04:18.000 – 04:38.000",fr:"6192 – 6671",dur:20},
+ {seg:"供应链",cls:"sup",who:"供应商2",role:"维修备件",tc:"04:38.000 – 04:58.000",fr:"6672 – 7151",dur:20},
+ {seg:"供应链",cls:"sup",who:"供应商3",role:"二级维修",tc:"04:58.000 – 05:18.000",fr:"7152 – 7631",dur:20},
+ {seg:"供应链",cls:"sup",who:"供应商4",role:"三方选件",tc:"05:18.000 – 05:38.000",fr:"7632 – 8111",dur:20},
+ {seg:"快闪",cls:"flash",who:"CS 快闪 20 张",role:"硬切 · 1.5s/张",tc:"05:38.000 – 06:08.000",fr:"8112 – 9023",dur:30},
+ {seg:"收尾",cls:"end",who:"全员定格",role:"最后一帧",tc:"06:08.000 – 06:20.000",fr:"9024 – 9119",dur:12}
+];
+// 真实时间轴位置（含 4 段各 2s 字卡，叠在首镜）
+const TL=[
+ {s:0,d:10,c:"s",t:"片头",n:"品牌包装 + 主题「百应相伴，一路同行」引入"},
+ {s:10,d:2,c:"csm",t:"华北篇 字卡",n:"叠在张继霖首镜上"},
+ {s:12,d:20,c:"csm",t:"张继霖",n:"华北 CSM"},
+ {s:32,d:20,c:"cs",t:"张松",n:"华北 CS"},
+ {s:52,d:20,c:"shop",t:"赵俊壹",n:"沈阳白塔店"},
+ {s:72,d:20,c:"shop",t:"刘昊",n:"北京四合上院店"},
+ {s:92,d:2,c:"csm",t:"华南篇 字卡",n:"叠在高振杰首镜上"},
+ {s:94,d:20,c:"csm",t:"高振杰",n:"华南 CSM"},
+ {s:114,d:20,c:"cs",t:"黄铁创",n:"华南 CS"},
+ {s:134,d:20,c:"shop",t:"郑智敏",n:"深圳永丰综合楼店"},
+ {s:154,d:20,c:"shop",t:"刘爱春",n:"合肥包河苑店"},
+ {s:174,d:2,c:"csm",t:"华中篇 字卡",n:"叠在廖文静首镜上"},
+ {s:176,d:20,c:"csm",t:"廖文静",n:"华中 CSM"},
+ {s:196,d:20,c:"cs",t:"张小丽",n:"华中 CS"},
+ {s:216,d:20,c:"shop",t:"陈建宇",n:"宁波鄞州万达店"},
+ {s:236,d:20,c:"shop",t:"杨海月",n:"盐城迎宾北路店"},
+ {s:256,d:2,c:"sup",t:"供应链篇 字卡",n:"叠在供应商1首镜上"},
+ {s:258,d:20,c:"sup",t:"供应商1",n:"百应选件"},
+ {s:278,d:20,c:"sup",t:"供应商2",n:"维修备件"},
+ {s:298,d:20,c:"sup",t:"供应商3",n:"二级维修"},
+ {s:318,d:20,c:"sup",t:"供应商4",n:"三方选件"},
+ {s:338,d:30,c:"flash",t:"CS 快闪 20 张",n:"3 CSM + 3 CS + 6 门店 + 4 供应商 + 2 合影 + 2 场景"},
+ {s:368,d:12,c:"end",t:"全员定格",n:"6 位 CS/CSM 九宫格 + 门店/供应商散点 + 标语"}
+];
+const TOT=380;
+const tl=document.getElementById('tl');
+const tip=document.getElementById('tip');
+function fmt(x){const m=Math.floor(x/60),s=(x%60).toFixed(3).padStart(6,'0');return m+":"+s}
+TL.forEach(it=>{
+  const d=document.createElement('div');
+  d.className='tl-seg '+it.c;
+  d.style.left=(it.s/TOT*100)+'%'; d.style.width=(it.d/TOT*100)+'%';
+  d.textContent=it.d>=12?(it.t.length>6?'':it.t):'';
+  d.addEventListener('mousemove',e=>{tip.style.display='block';tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY+14)+'px';
+    tip.innerHTML='<b>'+it.t+'</b><br>'+it.n+'<br>起点 '+fmt(it.s)+' · 时长 '+it.d.toFixed(3)+'s'+(it.d>=12?'<br>帧区间 '+Math.round(it.s*24)+' – '+Math.round((it.s+it.d)*24-1):'');});
+  d.addEventListener('mouseleave',()=>{tip.style.display='none'});
+  tl.appendChild(d);
+});
+const ru=document.getElementById('ruler');
+for(let s=0;s<=380;s+=30){
+  const i=document.createElement('i');
+  i.style.left=(s/TOT*100)+'%'; i.textContent=fmt(s);
+  ru.appendChild(i);
+}
+const rows=document.getElementById('rows');
+const T={'CSM':'t-csm','CS':'t-cs','门店':'t-shop','供应商':'t-sup','快闪':'t-flash','收尾':'t-end'};
+DATA.forEach(r=>{
+  const tr=document.createElement('tr');
+  let k=r.role;
+  if(r.who.indexOf('供应商')===0)k='供应商';
+  else if(r.who.indexOf('快闪')>=0)k='快闪';
+  else if(r.who.indexOf('全员')>=0)k='收尾';
+  tr.innerHTML='<td><span class="tag '+T[k]+'">'+r.seg+'</span></td><td><b>'+r.who+'</b></td><td>'+r.role+
+   '</td><td class="tc">'+r.tc+'</td><td class="tc">'+r.fr+'</td><td class="tc">'+r.dur.toFixed(3)+'s</td>';
+  rows.appendChild(tr);
+});
+const FLASH=[["张继霖","华北 CSM"],["张松","华北 CS"],["赵俊壹","沈阳白塔店"],["刘昊","北京四合上院店"],["高振杰","华南 CSM"],["黄铁创","华南 CS"],["郑智敏","深圳永丰综合楼店"],["刘爱春","合肥包河苑店"],["廖文静","华中 CSM"],["张小丽","华中 CS"],["陈建宇","宁波鄞州万达店"],["杨海月","盐城迎宾北路店"],["供应商1","百应选件"],["供应商2","维修备件"],["供应商3","二级维修"],["供应商4","三方选件"],["全体CS合影","大合影1"],["全体CS合影","大合影2"],["门店工作画面","维修现场/客服"],["团队工作画面","培训/交付"]];
+const fl=document.getElementById('flash');
+FLASH.forEach((f,i)=>{
+  const li=document.createElement('li');
+  li.innerHTML='<span>'+f[0]+'</span><em>'+f[1]+'</em>';
+  fl.appendChild(li);
+});
+</script>
+</body>
+</html>
