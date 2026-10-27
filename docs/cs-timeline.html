@@ -20,13 +20,13 @@ h1{font-size:26px;letter-spacing:.5px;margin-bottom:8px}
 .badge{background:#21262d;border:1px solid var(--line);border-radius:6px;padding:5px 11px;font-size:13px;color:var(--dim)}
 .badge b{color:var(--gold)}
 .bar-wrap{margin:26px 0 8px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px 18px}
-.bar-title{font-size:14px;color:var(--dim);margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+.bar-title{font-size:14px;color:var(--dim);margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
 .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--dim)}
 .legend span{display:flex;align-items:center;gap:5px}
 .dot{width:10px;height:10px;border-radius:2px;display:inline-block}
-.timeline{position:relative;height:78px;background:#0b0f14;border:1px solid var(--line);border-radius:6px;overflow:hidden;cursor:pointer}
+.timeline{position:relative;height:78px;background:#0b0f14;border:1px solid var(--line);border-radius:6px;overflow:hidden}
 .tl-seg{position:absolute;top:0;bottom:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;border-right:1px solid rgba(0,0,0,.45);overflow:hidden;white-space:nowrap;transition:filter .15s}
-.tl-seg:hover{filter:brightness(1.35)}
+.tl-seg:hover{filter:brightness(1.4)}
 .tl-seg.s{background:#30363d;color:#c9d1d9}
 .tl-seg.csm{background:linear-gradient(180deg,#4a8ef0,#2a6fd0)}
 .tl-seg.cs{background:linear-gradient(180deg,#3fb950,#2a8f3d)}
@@ -52,16 +52,30 @@ tr:hover td{background:#1a1f26}
 .card h3{font-size:14px;color:var(--gold);margin-bottom:10px}
 .bar-mini{height:26px;border-radius:5px;overflow:hidden;display:flex;margin:10px 0 8px;font-size:11px;color:#fff}
 .bar-mini div{display:flex;align-items:center;justify-content:center;border-right:1px solid rgba(0,0,0,.4)}
-.kv{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #262d36;font-size:13px}
+.kv{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #262d36;font-size:13px;gap:12px}
 .kv:last-child{border:0}
-.kv span:last-child{color:var(--dim)}
-ol.flashlist{list-style:none;counter-reset:f;columns:2;column-gap:26px;font-size:12.5px}
-ol.flashlist li{counter-increment:f;padding:4px 0;break-inside:avoid;display:flex;gap:8px}
-ol.flashlist li::before{content:counter(f,decimal-leading-zero);color:var(--gold);font-variant-numeric:tabular-nums;flex:0 0 22px}
-ol.flashlist li em{font-style:normal;color:var(--dim);font-size:11.5px;margin-left:auto;white-space:nowrap}
+.kv span:last-child{color:var(--dim);white-space:nowrap}
 .note{margin-top:26px;background:#12161d;border-left:3px solid var(--gold);padding:14px 16px;font-size:13px;color:#c9d1d9;line-height:2;border-radius:0 6px 6px 0}
 .note b{color:var(--gold)}
-.pct{font-variant-numeric:tabular-nums}
+.grid32{display:grid;grid-template-columns:repeat(8,1fr);gap:8px}
+@media(max-width:1000px){.grid32{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:560px){.grid32{grid-template-columns:repeat(2,1fr)}}
+.pcard{background:#1b2028;border:1px solid var(--line);border-radius:7px;padding:9px 6px;text-align:center;position:relative}
+.pcard .no{position:absolute;top:4px;left:6px;font-size:10px;color:#4d5560}
+.pcard .ph{width:100%;aspect-ratio:1/1;border-radius:5px;background:linear-gradient(145deg,#252c36,#1a1f27);border:1px dashed #3a424e;display:flex;align-items:center;justify-content:center;color:#4d5560;font-size:11px;margin-bottom:6px}
+.pcard .nm{font-size:12.5px;font-weight:600}
+.pcard .rg{font-size:10.5px;margin-top:2px}
+.rg-hb{color:#4a8ef0}.rg-hn{color:#3fb950}.rg-hz{color:#f0a020}
+.regrow{display:flex;align-items:center;gap:10px;margin:16px 0 8px;font-size:13px}
+.regrow b{min-width:56px}
+.regrow span{color:var(--dim);font-size:12px}
+h3.sub2{font-size:14px;color:var(--gold);margin:22px 0 8px}
+.flashlist{list-style:none;counter-reset:f;columns:3;column-gap:24px;font-size:12.5px}
+@media(max-width:900px){.flashlist{columns:2}}
+@media(max-width:560px){.flashlist{columns:1}}
+.flashlist li{counter-increment:f;padding:4px 0;break-inside:avoid;display:flex;gap:8px;border-bottom:1px dashed #262d36}
+.flashlist li::before{content:counter(f,decimal-leading-zero);color:var(--gold);font-variant-numeric:tabular-nums;flex:0 0 24px}
+.flashlist li em{font-style:normal;color:var(--dim);font-size:11.5px;margin-left:auto;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -69,7 +83,7 @@ ol.flashlist li em{font-style:normal;color:var(--dim);font-size:11.5px;margin-le
 <header>
   <h1>CS大会视频《百应相伴，一路同行》· 节奏时间轴</h1>
   <div class="sub">
-    大会时间 2026-11-19 ｜ 目标交片 11-13 ｜ 规格 <b>1920×1080 / 24fps / 380.000s / 9120 帧</b> ｜ 上台 <b>16 人</b>（3区域×4 + 供应链4）｜ 每人 <b>20.000s</b>
+    大会时间 2026-11-19 ｜ 目标交片 11-13 ｜ 规格 <b>1920×1080 / 24fps / 380.000s / 9120 帧</b> ｜ 上台 <b>16 人</b>（3区域×4 + 供应链4）｜ 每人 <b>20.000s</b> ｜ 片尾 CS 照片覆盖 <b>全部 32 位 CS</b>
   </div>
   <div class="badges">
     <div class="badge">总时长 <b>6分20.000秒</b></div>
@@ -77,6 +91,7 @@ ol.flashlist li em{font-style:normal;color:var(--dim);font-size:11.5px;margin-le
     <div class="badge">快闪 <b>30.000s</b> / 7.9%</div>
     <div class="badge">定格 <b>12.000s</b> / 3.2%</div>
     <div class="badge">片头 <b>10.000s</b> / 2.6%</div>
+    <div class="badge">CS 照片 <b>32 位</b>（华北10 + 华南11 + 华中11）</div>
   </div>
 </header>
 
@@ -115,8 +130,8 @@ ol.flashlist li em{font-style:normal;color:var(--dim);font-size:11.5px;margin-le
     </div>
     <div class="kv"><span>片头（品牌包装引入）</span><span>10.000s / 2.6%</span></div>
     <div class="kv"><span>16 人口播（16×20s，严格等长）</span><span>320.000s / 84.2%</span></div>
-    <div class="kv"><span>CS 快闪（20张×1.5s 硬切）</span><span>30.000s / 7.9%</span></div>
-    <div class="kv"><span>定格收尾（全员定格+标语）</span><span>12.000s / 3.2%</span></div>
+    <div class="kv"><span>CS 快闪（40张 × 0.750s 硬切）</span><span>30.000s / 7.9%</span></div>
+    <div class="kv"><span>定格收尾（32位CS + 门店 + 供应商）</span><span>12.000s / 3.2%</span></div>
     <div class="kv"><span>篇章字卡（4×2s 叠首镜）</span><span>8.000s / 2.1%</span></div>
   </div>
   <div class="card">
@@ -126,27 +141,47 @@ ol.flashlist li em{font-style:normal;color:var(--dim);font-size:11.5px;margin-le
     <div class="kv"><span>华南篇（4人）</span><span>01:34 – 02:54</span></div>
     <div class="kv"><span>华中篇（4人）</span><span>02:56 – 04:16</span></div>
     <div class="kv"><span>供应链篇（4人）</span><span>04:18 – 05:38</span></div>
-    <div class="kv"><span>CS 快闪</span><span>05:38 – 06:08</span></div>
-    <div class="kv"><span>定格收尾</span><span>06:08 – 06:20</span></div>
-    <div class="kv"><span>尾板定格（全员）</span><span>6 位 CS/CSM 九宫格 + 门店/供应商散点</span></div>
+    <div class="kv"><span>CS 快闪（40张）</span><span>05:38 – 06:08</span></div>
+    <div class="kv"><span>定格收尾（最后一帧）</span><span>06:08 – 06:20</span></div>
+    <div class="kv"><span>最后一帧定格内容</span><span>32 位 CS 照片全量上墙</span></div>
   </div>
 </div>
 
-<h2>CS 快闪 20 张明细（每张 1.500s / 36 帧，硬切 + 0.5 帧白闪）</h2>
+<h2>最后一帧定格画面：全部 32 位 CS 照片</h2>
+<p style="color:var(--dim);font-size:13px;margin-bottom:6px">定格帧为 8 列 × 4 行 CS 照片矩阵（32 位全覆盖，按大区顺序排列），底部一条门店老板 + 供应商照片条，叠加主题标语「百应相伴，一路同行」与联想百应 logo。</p>
+<div id="grid32"></div>
+<div class="regrow"><b style="color:#4a8ef0">华北 10</b><span>张继霖（华北大区）｜刘磊｜卫中杰｜孙浩｜张松｜李康｜程新佳｜胡琦博｜白陆｜陈凯奇</span></div>
+<div class="regrow"><b style="color:#3fb950">华南 11</b><span>高振杰（华南大区）｜徐杰｜李凯｜李剑锋｜李琦｜王进干｜赵珂｜郭凯｜黄铁创｜丁美平｜韦娇月</span></div>
+<div class="regrow"><b style="color:#f0a020">华中 11</b><span>廖文静（华中大区）｜何建岳｜张小丽｜杨浩｜熊新月｜王振兴｜王跃琦｜田炎晖｜胡伟｜袁程｜桑瑶瑶</span></div>
+<div class="regrow"><b style="color:#d1830f">底部照片条 10</b><span>门店老板 6：赵俊壹（沈阳白塔店）｜刘昊（北京四合上院店）｜郑智敏（深圳永丰综合楼店）｜刘爱春（合肥包河苑店）｜陈建宇（宁波鄞州万达店）｜杨海月（盐城迎宾北路店） ｜ 供应商 4：百应选件｜维修备件｜二级维修｜三方选件</span></div>
+
+<h3 class="sub2">快闪 40 张明细（每张 0.750s / 18 帧，硬切 + 0.5 帧白闪）</h3>
 <ol class="flashlist" id="flash"></ol>
 
 <div class="note">
   <b>执行铁律：</b>禁止用「按秒裁切」，一律按帧对齐（<b>-frames:v</b> 精确取帧 + <b>tpad</b> 补足），24fps 下按秒裁会累积舍入误差。<br>
-  <b>音频：</b>轻快温暖企业向弦乐铺底，人声段 sidechain duck −12dB，整体 −14.0 LUFS（LRA ≤ 3.0，真峰 ≤ −1.5 dBTP）；快闪段每 1.500s 一次击点；结尾 1.5s 落到主题旋律。<br>
-  <b>素材要求：</b>照片统一 3:4 竖版或 1:1，短边 ≥1200px，主体居中不戴墨镜；每人 1 张正脸半身照 + 1 张工作场景照，命名与片头规范一致。
+  <b>音频：</b>轻快温暖企业向弦乐铺底，人声段 sidechain duck −12dB，整体 −14.0 LUFS（LRA ≤ 3.0，真峰 ≤ −1.5 dBTP）；快闪段每 0.750s 一次击点；结尾 1.5s 落到主题旋律。<br>
+  <b>素材要求：</b>32 位 CS 每位必须提供 1 张正脸半身照（定格帧用）+ 1 张工作场景照（快闪用），照片统一 3:4 竖版或 1:1，短边 ≥1200px，主体居中不戴墨镜，命名与片头规范一致。
 </div>
 </div>
 
 <div class="tl-tip" id="tip"></div>
 
 <script>
+const CS=[
+ ["华北","张继霖","华北大区"],["华北","刘磊","郑州"],["华北","卫中杰","太原,山西"],["华北","孙浩","济南,淄博,潍坊"],
+ ["华北","张松","北京"],["华北","李康","西安"],["华北","程新佳","沈阳,长春"],["华北","胡琦博","天津,保定,石家庄,邯郸,河北"],
+ ["华北","白陆","吉林"],["华北","陈凯奇","鲁东"],
+ ["华南","高振杰","华南大区"],["华南","徐杰","长沙,株洲，岳阳"],["华南","李凯","深圳"],["华南","李剑锋","深圳"],
+ ["华南","李琦","南宁,桂林"],["华南","王进干","广州,清远,佛山"],["华南","赵珂","贵阳,昆明"],["华南","郭凯","福州,福建"],
+ ["华南","黄铁创","广州,佛山,清远"],["华南","丁美平","安徽"],["华南","韦娇月","安徽"],
+ ["华中","廖文静","华中大区"],["华中","何建岳","兰州,银川，乌鲁木齐，西宁"],["华中","张小丽","成都"],["华中","杨浩","成都,宜宾"],
+ ["华中","熊新月","宁波,金华,温州，台州，舟山"],["华中","王振兴","杭州,嘉兴，绍兴，湖州，衢州，丽水"],["华中","王跃琦","重庆"],
+ ["华中","田炎晖","武汉,湖北"],["华中","胡伟","南京,淮安，扬州，镇江，宿迁，徐州，连云港，泰州，南通，盐城"],["华中","袁程","苏州"],["华中","桑瑶瑶","上海"]
+];
+const SUPS=["供应商1 · 百应选件","供应商2 · 维修备件","供应商3 · 二级维修","供应商4 · 三方选件"];
 const DATA=[
- {seg:"片头",cls:"s",who:"品牌包装 + 主题引入",role:"—",tc:"00:00.000 – 00:10.000",fr:"0 – 239",dur:10.000,tip:"品牌包装 + 主题「百应相伴，一路同行」引入"},
+ {seg:"片头",cls:"s",who:"品牌包装 + 主题引入",role:"—",tc:"00:00.000 – 00:10.000",fr:"0 – 239",dur:10.000},
  {seg:"华北",cls:"csm",who:"张继霖",role:"CSM",tc:"00:12.000 – 00:32.000",fr:"288 – 767",dur:20},
  {seg:"华北",cls:"cs",who:"张松",role:"CS",tc:"00:32.000 – 00:52.000",fr:"768 – 1247",dur:20},
  {seg:"华北",cls:"shop",who:"赵俊壹",role:"门店·沈阳白塔店",tc:"00:52.000 – 01:12.000",fr:"1248 – 1727",dur:20},
@@ -163,10 +198,9 @@ const DATA=[
  {seg:"供应链",cls:"sup",who:"供应商2",role:"维修备件",tc:"04:38.000 – 04:58.000",fr:"6672 – 7151",dur:20},
  {seg:"供应链",cls:"sup",who:"供应商3",role:"二级维修",tc:"04:58.000 – 05:18.000",fr:"7152 – 7631",dur:20},
  {seg:"供应链",cls:"sup",who:"供应商4",role:"三方选件",tc:"05:18.000 – 05:38.000",fr:"7632 – 8111",dur:20},
- {seg:"快闪",cls:"flash",who:"CS 快闪 20 张",role:"硬切 · 1.5s/张",tc:"05:38.000 – 06:08.000",fr:"8112 – 9023",dur:30},
- {seg:"收尾",cls:"end",who:"全员定格",role:"最后一帧",tc:"06:08.000 – 06:20.000",fr:"9024 – 9119",dur:12}
+ {seg:"快闪",cls:"flash",who:"CS 快闪 40 张",role:"32位CS + 4供应商 + 2场景 + 2合影",tc:"05:38.000 – 06:08.000",fr:"8112 – 9023",dur:30},
+ {seg:"收尾",cls:"end",who:"全部 32 位 CS 定格",role:"最后一帧",tc:"06:08.000 – 06:20.000",fr:"9024 – 9119",dur:12}
 ];
-// 真实时间轴位置（含 4 段各 2s 字卡，叠在首镜）
 const TL=[
  {s:0,d:10,c:"s",t:"片头",n:"品牌包装 + 主题「百应相伴，一路同行」引入"},
  {s:10,d:2,c:"csm",t:"华北篇 字卡",n:"叠在张继霖首镜上"},
@@ -189,29 +223,24 @@ const TL=[
  {s:278,d:20,c:"sup",t:"供应商2",n:"维修备件"},
  {s:298,d:20,c:"sup",t:"供应商3",n:"二级维修"},
  {s:318,d:20,c:"sup",t:"供应商4",n:"三方选件"},
- {s:338,d:30,c:"flash",t:"CS 快闪 20 张",n:"3 CSM + 3 CS + 6 门店 + 4 供应商 + 2 合影 + 2 场景"},
- {s:368,d:12,c:"end",t:"全员定格",n:"6 位 CS/CSM 九宫格 + 门店/供应商散点 + 标语"}
+ {s:338,d:30,c:"flash",t:"CS 快闪 40 张",n:"32 位 CS 照片 + 4 供应商 + 2 场景 + 2 合影，每张 0.750s"},
+ {s:368,d:12,c:"end",t:"全部 32 位 CS 定格",n:"8×4 照片矩阵 + 门店/供应商照片条 + 主题标语"}
 ];
 const TOT=380;
-const tl=document.getElementById('tl');
-const tip=document.getElementById('tip');
+const tl=document.getElementById('tl'), tip=document.getElementById('tip');
 function fmt(x){const m=Math.floor(x/60),s=(x%60).toFixed(3).padStart(6,'0');return m+":"+s}
 TL.forEach(it=>{
   const d=document.createElement('div');
   d.className='tl-seg '+it.c;
   d.style.left=(it.s/TOT*100)+'%'; d.style.width=(it.d/TOT*100)+'%';
-  d.textContent=it.d>=12?(it.t.length>6?'':it.t):'';
+  if(it.d>=12 && it.t.length<=8) d.textContent=it.t;
   d.addEventListener('mousemove',e=>{tip.style.display='block';tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY+14)+'px';
-    tip.innerHTML='<b>'+it.t+'</b><br>'+it.n+'<br>起点 '+fmt(it.s)+' · 时长 '+it.d.toFixed(3)+'s'+(it.d>=12?'<br>帧区间 '+Math.round(it.s*24)+' – '+Math.round((it.s+it.d)*24-1):'');});
+    tip.innerHTML='<b>'+it.t+'</b><br>'+it.n+'<br>起点 '+fmt(it.s)+' · 时长 '+it.d.toFixed(3)+'s<br>帧区间 '+Math.round(it.s*24)+' – '+Math.round((it.s+it.d)*24-1);});
   d.addEventListener('mouseleave',()=>{tip.style.display='none'});
   tl.appendChild(d);
 });
 const ru=document.getElementById('ruler');
-for(let s=0;s<=380;s+=30){
-  const i=document.createElement('i');
-  i.style.left=(s/TOT*100)+'%'; i.textContent=fmt(s);
-  ru.appendChild(i);
-}
+for(let s=0;s<=380;s+=30){const i=document.createElement('i');i.style.left=(s/TOT*100)+'%';i.textContent=fmt(s);ru.appendChild(i);}
 const rows=document.getElementById('rows');
 const T={'CSM':'t-csm','CS':'t-cs','门店':'t-shop','供应商':'t-sup','快闪':'t-flash','收尾':'t-end'};
 DATA.forEach(r=>{
@@ -219,14 +248,27 @@ DATA.forEach(r=>{
   let k=r.role;
   if(r.who.indexOf('供应商')===0)k='供应商';
   else if(r.who.indexOf('快闪')>=0)k='快闪';
-  else if(r.who.indexOf('全员')>=0)k='收尾';
+  else if(r.who.indexOf('全部')>=0)k='收尾';
   tr.innerHTML='<td><span class="tag '+T[k]+'">'+r.seg+'</span></td><td><b>'+r.who+'</b></td><td>'+r.role+
    '</td><td class="tc">'+r.tc+'</td><td class="tc">'+r.fr+'</td><td class="tc">'+r.dur.toFixed(3)+'s</td>';
   rows.appendChild(tr);
 });
-const FLASH=[["张继霖","华北 CSM"],["张松","华北 CS"],["赵俊壹","沈阳白塔店"],["刘昊","北京四合上院店"],["高振杰","华南 CSM"],["黄铁创","华南 CS"],["郑智敏","深圳永丰综合楼店"],["刘爱春","合肥包河苑店"],["廖文静","华中 CSM"],["张小丽","华中 CS"],["陈建宇","宁波鄞州万达店"],["杨海月","盐城迎宾北路店"],["供应商1","百应选件"],["供应商2","维修备件"],["供应商3","二级维修"],["供应商4","三方选件"],["全体CS合影","大合影1"],["全体CS合影","大合影2"],["门店工作画面","维修现场/客服"],["团队工作画面","培训/交付"]];
+const g=document.getElementById('grid32');
+CS.forEach((c,i)=>{
+  const cls=c[0]==='华北'?'rg-hb':(c[0]==='华南'?'rg-hn':'rg-hz');
+  const d=document.createElement('div'); d.className='pcard';
+  d.innerHTML='<span class="no">'+String(i+1).padStart(2,'0')+'</span><div class="ph">照片</div><div class="nm">'+c[1]+'</div><div class="rg '+cls+'">'+c[0]+' · '+c[2]+'</div>';
+  g.appendChild(d);
+});
+const FLASH=[];
+CS.forEach(c=>FLASH.push([c[1],c[0]+' CS']));
+SUPS.forEach(s=>FLASH.push([s,'供应商']));
+FLASH.push(['全体CS合影','大合影1']);
+FLASH.push(['全体CS合影','大合影2']);
+FLASH.push(['门店工作画面','维修现场/客服']);
+FLASH.push(['团队工作画面','培训/交付']);
 const fl=document.getElementById('flash');
-FLASH.forEach((f,i)=>{
+FLASH.forEach(f=>{
   const li=document.createElement('li');
   li.innerHTML='<span>'+f[0]+'</span><em>'+f[1]+'</em>';
   fl.appendChild(li);
